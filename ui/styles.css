@@ -1,0 +1,45 @@
+body {
+  margin: 0px;
+}
+#topnav {
+  background-color: #000;
+  overflow: hidden;
+}
+#topnav a {
+  float: left;
+  text-decoration: none;
+  padding: 10px;
+  color: white;
+  font-family: cursive;
+}
+#topnav-right {
+  float: right;
+}
+h1, h3 {
+  text-align: center;
+  font-family: 'Mina';
+}
+.main {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 1200px;
+  height: 500px;
+}
+.row {
+  display: table;
+  clear: both;
+  margin: 20px 0px 0px 70px;
+}
+.column {
+  float: left;
+  width: 350px;
+}
+img {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}
