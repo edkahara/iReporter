@@ -3,9 +3,9 @@ body {
 }
 a {
   text-decoration: none;
+  color: white;
 }
 h1, h3 {
-  text-align: center;
   font-family: 'Mina';
 }
 img {
@@ -21,7 +21,13 @@ button {
   border-radius: 10px;
   cursor: pointer;
   border: none;
-  color: white;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, body, tr, td {
+  border: 3px solid black;
 }
 #topnav {
   background-color: #000;
@@ -30,14 +36,12 @@ button {
 #topnav a {
   float: left;
   padding: 10px;
-  color: white;
   font-family: cursive;
   font-size: 20px;
 }
 #topnav-right {
   float: right;
 }
-
 .main {
   text-align: center;
   position: absolute;
@@ -47,7 +51,7 @@ button {
   bottom: 0;
   left: 0;
   width: 1200px;
-  height: 500px;
+  height: 80%;
 }
 .row {
   display: table;
@@ -57,6 +61,14 @@ button {
 .column {
   float: left;
   width: 350px;
+}
+@media only screen and (max-width: 1200px) {
+    .main, .column {
+      width: 100%;
+    }
+    .row {
+      margin-left: 10%;
+    }
 }
 .container {
   border-radius: 5px;
@@ -76,13 +88,23 @@ button {
     resize: vertical
 }
 .submit {
-    color: white;
     border: none;
-    background-color: #1a1aff;
+    background-color: green;
     width: 200px;
     height: 30px;
     font-size: 20px;
 }
 .notice {
   color: white;
+}
+.actions button {
+  background-color: blue;
+  width: 300px;
+  height: 70px;
+  font-size: 25px;
+  font-family: monospace;
+  margin: 5px;
+}
+.delete {
+  background-color: red;
 }
