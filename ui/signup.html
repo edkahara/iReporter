@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>iReporter</title>
+    <title>iReporter | Sign Up</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
   </head>
@@ -10,7 +10,7 @@
     <div id="topnav">
       <a href="./index.html" id="home"><strong>iReporter</strong></a>
       <div id="topnav-right">
-        <a href="#login">Log In</a>
+        <a href="./login.html">Log In</a>
       </div>
     </div>
     <div class="main">
@@ -20,17 +20,14 @@
       <div class="container">
        <form>
          <label for="email"><b>Email</b></label>
-         <input type="email" class="information" name="email address" placeholder="email address">
+         <input type="email" class="information" name="email address">
          <label for="password"><b>Password</b></label>
-         <input type="password" class="information" name="password" placeholder="password">
-         <label for="password"><b>Confirm Password</b></label>
-         <input type="password" class="information" name="confirm password" placeholder="confirm password">
-         <div class="actions">
-           <button type="button" id="cancel">Cancel</button>
-           <button type="submit" id="signup">Sign Up</button>
-         </div>
+         <input type="password" class="information" name="password">
+         <label for="password"><b>Password Confirmation</b></label>
+         <input type="password" class="information" name="confirm password">
+         <button type="submit" class="submit">Sign Up</button>
        </form>
-       <p>Already have an account? <a href="#login">Log In</a></p>
+       <p>Already have an account? <a href="./login.html" class="notice">Log In</a></p>
      </div>
     </div>
   </body>
