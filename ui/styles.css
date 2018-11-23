@@ -21,13 +21,25 @@ button {
   border-radius: 10px;
   cursor: pointer;
   border: none;
+  color: white;
 }
 table {
   border-collapse: collapse;
   width: 100%;
 }
-th, body, tr, td {
+th {
+  background-color: #3498db;
+  color: white;
+}
+th, td {
   border: 3px solid black;
+  font-size: 20px;
+}
+tbody {
+  text-align: left;
+}
+tbody tr:nth-of-type(odd) {
+	background: #eee;
 }
 #topnav {
   background-color: #000;
@@ -97,14 +109,46 @@ th, body, tr, td {
 .notice {
   color: white;
 }
-.actions button {
-  background-color: blue;
-  width: 300px;
-  height: 70px;
+.report {
+  background-color: green;
+  width: 200px;
+  height: 60px;
   font-size: 25px;
   font-family: monospace;
   margin: 5px;
 }
-.delete {
+.powers {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+}
+.cases {
+  width: 200px;
+  height: 60px;
+  background-color: blue;
+  margin: 5px;
+}
+.cases {
+  font-size: 20px;
+}
+#accept {
+  background-color: green;
+}
+#reject {
+  background-color: orange;
+}
+#delete {
   background-color: red;
+}
+#corruption-cases:target {
+  display: none;
+}
+#intervention-cases:target {
+  display: none;
+}
+.date, .status {
+  width: 10%;
+}
+.actions {
+  width: 20%;
 }
