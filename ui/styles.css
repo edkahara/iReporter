@@ -135,6 +135,9 @@ tbody tr:nth-of-type(odd) {
   background-color: green;
 }
 #reject {
+  background-color: brown;
+}
+#edit {
   background-color: orange;
 }
 #delete {
@@ -148,6 +151,9 @@ tbody tr:nth-of-type(odd) {
 }
 .date, .status, .reporter {
   width: 10%;
+}
+.reporter a {
+  color: black;
 }
 .actions {
   width: 20%;
