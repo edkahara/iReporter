@@ -1,5 +1,6 @@
-body {
-  margin: 0px;
+html, body {
+  height: 100%;
+  margin: 0;
 }
 a {
   text-decoration: none;
@@ -41,17 +42,21 @@ tbody {
 tbody tr:nth-of-type(odd) {
 	background: #eee;
 }
-#topnav {
+.topnav {
   background-color: #000;
+  width: 100%;
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
 }
-#topnav a {
+.topnav a {
   float: left;
   padding: 10px;
   font-family: cursive;
   font-size: 20px;
 }
-#topnav-right {
+.topnav-right {
   float: right;
 }
 .main {
@@ -99,16 +104,6 @@ tbody tr:nth-of-type(odd) {
     margin-bottom: 16px;
     resize: vertical
 }
-.submit {
-    border: none;
-    background-color: green;
-    width: 200px;
-    height: 30px;
-    font-size: 20px;
-}
-.notice {
-  color: white;
-}
 .report {
   background-color: green;
   width: 200px;
@@ -116,6 +111,16 @@ tbody tr:nth-of-type(odd) {
   font-size: 25px;
   font-family: monospace;
   margin: 5px;
+}
+.submit {
+  border: none;
+  background-color: green;
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+}
+.notice {
+  color: white;
 }
 .powers {
   width: 50px;
@@ -149,12 +154,30 @@ tbody tr:nth-of-type(odd) {
 #intervention-cases:target {
   display: none;
 }
-.date, .status, .reporter {
+select {
+  margin: 5px 0px 15px 0px;
+}
+.date, .status {
   width: 10%;
 }
-.reporter a {
+.actions {
+  width: 25%;
+}
+.reporter {
+  width: 15%;
+}
+.show {
   color: black;
 }
-.actions {
-  width: 20%;
+#report-description {
+  text-align: left;
+}
+#report-story {
+  background-color: #80ffff;
+}
+#report-description {
+  font-size: 20px;
+}
+#report-story a {
+  color: purple;
 }

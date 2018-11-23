@@ -7,17 +7,15 @@
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
   </head>
   <body>
-    <div id="topnav">
+    <div class="topnav">
       <a href="./profile.html" id="home"><strong>iReporter</strong></a>
-      <div id="topnav-right">
+      <div class="topnav-right">
+        <a href="./create-report.html">Create Report</a>
         <a href="./admin.html">Admin Page</a>
         <a href="./login.html">Log Out</a>
       </div>
     </div>
     <div class="main">
-      <div>
-        <a href="./create-report.html"><button class="report">Create Report</button></a>
-      </div>
       <div>
          <a href="#all-cases"><button class="cases">All Cases</button></a>
          <a href="#intervention-cases"><button class="cases">Corruption Cases</button></a>
@@ -26,67 +24,67 @@
       <div class="options" id="corruption-cases">
         <h3>My Corruption Cases</h3>
         <table>
-        	<thead>
-          	<tr>
+          <thead>
+            <tr>
               <th>Title</th>
               <th class="date">Date Created</th>
-          		<th class="status">Status</th>
+              <th class="status">Status</th>
               <th class="actions">Actions</th>
-          	</tr>
-        	</thead>
-        	<tbody>
-          	<tr>
-          		<td>City Council bribery</td>
-              <td class="date">22/11/2018</td>
-          		<td class="status">Accepted</td>
-              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
-          	<tr>
-          		<td>Tender corruption</td>
-              <td class="date">22/11/2018</td>
-          		<td class="status">Pending</td>
-              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
-          		<td>Traffic police corruption</td>
+              <td>City Council bribery</td>
               <td class="date">22/11/2018</td>
-          		<td class="status">Rejected</td>
+              <td class="status">Accepted</td>
               <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
-        	</tbody>
+            </tr>
+            <tr>
+              <td>Tender corruption</td>
+              <td class="date">22/11/2018</td>
+              <td class="status">Pending</td>
+              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
+            </tr>
+            <tr>
+              <td>Traffic police corruption</td>
+              <td class="date">22/11/2018</td>
+              <td class="status">Rejected</td>
+              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <div class="options" id="intervention-cases">
         <h3>My Intervention Cases</h3>
         <table>
-        	<thead>
-          	<tr>
+          <thead>
+            <tr>
               <th>Title</th>
               <th class="date">Date Created</th>
-          		<th class="status">Status</th>
+              <th class="status">Status</th>
               <th class="actions">Actions</th>
-          	</tr>
-        	</thead>
-        	<tbody>
-          	<tr>
-          		<td>Budalangi floods</td>
-              <td class="date">22/11/2018</td>
-          		<td class="status">Accepted</td>
-              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
-          	<tr>
-          		<td>Huruma building collapse</td>
-              <td class="date">22/11/2018</td>
-          		<td class="status">Pending</td>
-              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
-          		<td>Pumwani hospital understocked</td>
+              <td><a class="show" href="./report.html">Budalangi floods</a></td>
               <td class="date">22/11/2018</td>
-          		<td class="status">Rejected</td>
+              <td class="status">Accepted</td>
               <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
-          	</tr>
-        	</tbody>
+            </tr>
+            <tr>
+              <td>Huruma building collapse</td>
+              <td class="date">22/11/2018</td>
+              <td class="status">Pending</td>
+              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
+            </tr>
+            <tr>
+              <td>Pumwani hospital understocked</td>
+              <td class="date">22/11/2018</td>
+              <td class="status">Rejected</td>
+              <td class="actions"><a href="./edit-report.html"><button class="powers" id="edit">Edit</button></a><a href="./profile.html"><button class="powers" id="delete">Delete</button></a></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
