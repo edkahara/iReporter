@@ -5,6 +5,7 @@
     <title>iReporter | New Report</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+    <script type="text/javascript" src="./script.js"></script>
   </head>
   <body>
     <div class="topnav">
@@ -21,15 +22,18 @@
        <form action="./profile.html" class="report-form">
          <label for="report-type"><b>Type of Report</b></label><br/>
          <select name="report-type">
-           <option value="Corruption Report">Corruption Report</option>
-           <option value="Intervention quest">Intervention Request</option>
+           <option value="Corruption Report">Red Flag Report</option>
+           <option value="Intervention quest">Intervention Report</option>
          </select><br/>
          <label for="title"><b>Title</b></label>
          <input type="text" class="information" name="title">
          <label for="description"><b>Description</b></label>
          <textarea rows="8" cols="80" class="information" name="description"></textarea>
-         <label for="upload"><b>Upload Attachment</b></label>
-         <input type="file" class="information" name="upload">
+         <label for="location"><b>Location</b></label><input type="button" id="get-location" value="Get My Location" onclick="getLocationConstant()"><br/>
+         <label for="location" class="geolocation"><b>Latitude</b></label><input type="text" class="location" name="latitude" id="latitude">
+         <label for="location" class="geolocation"><b>Longitude</b></label><input type="text" class="location" name="longitude" id="longitude"><br/>
+         <label for="upload"><b>Media</b></label><br/>
+         <input type="file" name="upload" class="upload"><br/>
          <label for="password"><b>Password</b></label>
          <input type="password" class="information" name="password">
          <button type="submit" class="submit">Submit Report</button>

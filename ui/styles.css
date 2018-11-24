@@ -2,12 +2,12 @@ html, body {
   height: 100%;
   margin: 0;
 }
+h1, h3 {
+  font-family: 'Mina';
+}
 a {
   text-decoration: none;
   color: white;
-}
-h1, h3 {
-  font-family: 'Mina';
 }
 img {
   width: 300px;
@@ -24,6 +24,9 @@ button {
   border: none;
   color: white;
 }
+select {
+  margin: 5px 0px 15px 0px;
+}
 table {
   border-collapse: collapse;
   width: 100%;
@@ -35,12 +38,20 @@ th {
 th, td {
   border: 3px solid black;
   font-size: 20px;
+  padding: 3px;
 }
 tbody {
   text-align: left;
 }
 tbody tr:nth-of-type(odd) {
 	background: #eee;
+}
+.main {
+  padding: 20px;
+  min-height: 100%;
+  margin: 10vh auto 0;
+  text-align: center;
+  width: 1200px;
 }
 .topnav {
   background-color: #000;
@@ -59,16 +70,74 @@ tbody tr:nth-of-type(odd) {
 .topnav-right {
   float: right;
 }
-.main {
-  text-align: center;
-  position: absolute;
-  margin: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 1200px;
-  height: 80%;
+.notice {
+  color: white;
+}
+.cases {
+  width: 200px;
+  height: 60px;
+  background-color: blue;
+  margin: 5px;
+  font-size: 20px;
+}
+.container {
+  border-radius: 5px;
+  background-color: #595959;
+  padding: 10px;
+  width: 50%;
+  display: inline-block;
+}
+.information {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical
+}
+.location {
+  width: 30%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 10px;
+}
+.geolocation {
+  text-align: left;
+  font-size: 15px;
+  margin: 2px;
+}
+.upload {
+  margin: 10px;
+}
+.report {
+  background-color: green;
+  width: 200px;
+  height: 60px;
+  font-size: 25px;
+  font-family: monospace;
+  margin: 5px;
+}
+.date, .status {
+  width: 10%;
+}
+.actions {
+  width: 25%;
+}
+.powers {
+  width: 75px;
+  height: 50px;
+  margin: 5px;
+}
+.reporter {
+  width: 15%;
+}
+.show {
+  color: black;
+}
+.show:hover {
+  text-decoration: underline;
 }
 .row {
   display: table;
@@ -79,39 +148,6 @@ tbody tr:nth-of-type(odd) {
   float: left;
   width: 350px;
 }
-@media only screen and (max-width: 1200px) {
-    .main, .column {
-      width: 100%;
-    }
-    .row {
-      margin-left: 10%;
-    }
-}
-.container {
-  border-radius: 5px;
-  background-color: #595959;
-  padding: 10px;
-  width: 50%;
-  display: inline-block;
-}
-.information {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-top: 6px;
-    margin-bottom: 16px;
-    resize: vertical
-}
-.report {
-  background-color: green;
-  width: 200px;
-  height: 60px;
-  font-size: 25px;
-  font-family: monospace;
-  margin: 5px;
-}
 .submit {
   border: none;
   background-color: green;
@@ -119,65 +155,45 @@ tbody tr:nth-of-type(odd) {
   height: 30px;
   font-size: 20px;
 }
-.notice {
+#get-location {
+  background-color: #ff9900;
+  margin: 2px;
+  width: 160px;
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+  font-size: 20px;
   color: white;
 }
-.powers {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
+#red-flag-reports:target {
+  display: none;
 }
-.cases {
-  width: 200px;
-  height: 60px;
-  background-color: blue;
-  margin: 5px;
+#intervention-reports:target {
+  display: none;
 }
-.cases {
-  font-size: 20px;
-}
-#accept {
+#resolve {
   background-color: green;
 }
-#reject {
-  background-color: brown;
-}
-#edit {
-  background-color: orange;
-}
-#delete {
+#reject, #delete {
   background-color: red;
 }
-#corruption-cases:target {
-  display: none;
-}
-#intervention-cases:target {
-  display: none;
-}
-select {
-  margin: 5px 0px 15px 0px;
-}
-.date, .status {
-  width: 10%;
-}
-.actions {
-  width: 25%;
-}
-.reporter {
-  width: 15%;
-}
-.show {
-  color: black;
+#investigate, #edit {
+  background-color: orange;
 }
 #report-description {
   text-align: left;
 }
 #report-story {
-  background-color: #80ffff;
+  background-color: #cccccc;
 }
 #report-description {
   font-size: 20px;
 }
-#report-story a {
-  color: purple;
+@media only screen and (max-width: 1200px) {
+    .main, .column {
+      width: 100%;
+    }
+    .row {
+      margin-left: 10%;
+    }
 }
