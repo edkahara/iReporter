@@ -5,26 +5,28 @@
     <title>iReporter | Admin</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+    <script type="text/javascript" src="./script.js"></script>
   </head>
   <body>
-    <div class="topnav">
+    <div class="topnav" id="topnav">
       <a href="./profile.html" id="home"><strong>iReporter</strong></a>
       <div class="topnav-right">
         <a href="./profile.html">My Profile</a>
         <a href="./login.html">Log Out</a>
+        <a href="javascript:void(0);" class="icon" onclick="getDropdown()">&#9776;</a>
       </div>
     </div>
     <div class="main">
       <div>
-         <a href="#all-cases"><button class="cases">All Reports</button></a>
-         <a href="#intervention-reports"><button class="cases">Red Flag Reports</button></a>
-         <a href="#red-flag-reports"><button class="cases">Intervention Reports</button></a>
+        <a href="#all-cases"><button class="cases">All Reports</button></a>
+        <a href="#intervention-reports"><button class="cases">Red Flag Reports</button></a>
+        <a href="#red-flag-reports"><button class="cases">Intervention Reports</button></a>
       </div>
       <div id="red-flag-reports">
         <h3>All Red Flag Reports</h3>
         <table>
-        	<thead>
-          	<tr>
+          <thead>
+            <tr>
               <th class="reporter">Reporter</th>
           		<th>Title</th>
               <th class="date">Date Created</th>

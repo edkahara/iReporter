@@ -14,3 +14,11 @@ function onGeoSuccess(event) {
 function onGeoError(event) {
   alert("Error code " + event.code + ". " + event.message);
 }
+
+function getDropdown() {
+  if (document.getElementById("topnav").className === "topnav") {
+    document.getElementById("topnav").className += " responsive";
+  } else {
+    document.getElementById("topnav").className = "topnav";
+  }
+}

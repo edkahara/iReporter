@@ -5,24 +5,70 @@
     <title>iReporter | Profile</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+    <script type="text/javascript" src="./script.js"></script>
   </head>
   <body>
-    <div class="topnav">
+    <div class="topnav" id="topnav">
       <a href="./profile.html" id="home"><strong>iReporter</strong></a>
       <div class="topnav-right">
         <a href="./create-report.html">Create Report</a>
         <a href="./admin.html">Admin Page</a>
         <a href="./login.html">Log Out</a>
+        <a href="javascript:void(0);" class="icon" onclick="getDropdown()">&#9776;</a>
       </div>
     </div>
     <div class="main">
       <div>
-         <a href="#all-cases"><button class="cases">All Reports</button></a>
-         <a href="#intervention-reports"><button class="cases">Red Flag Reports</button></a>
-         <a href="#red-flag-reports"><button class="cases">Intervention Reports</button></a>
+        <div class="statistics" id="resolve">
+          <h2>Resolved</h2><hr>
+          <div class="types">
+            <h3>Red Flags</h3>
+            <h1>1</h1>
+          </div>
+          <div class="types">
+            <h3>Interventions</h3>
+            <h1>1</h1>
+          </div>
+          <div class="total">
+            <h1>Total: 2</h1>
+          </div>
+        </div>
+        <div class="statistics" id="investigate">
+          <h2>Under Investigation</h2><hr>
+          <div class="types">
+            <h3>Red Flags</h3>
+            <h1>1</h1>
+          </div>
+          <div class="types">
+            <h3>Interventions</h3>
+            <h1>1</h1>
+          </div>
+          <div class="total">
+            <h1>Total: 2</h1>
+          </div>
+        </div>
+        <div class="statistics" id="reject">
+          <h2>Rejected</h2><hr>
+          <div class="types">
+            <h3>Red Flags</h3>
+            <h1>1</h1>
+          </div>
+          <div class="types">
+            <h3>Interventions</h3>
+            <h1>1</h1>
+          </div>
+          <div class="total">
+            <h1>Total: 2</h1>
+          </div>
+        </div>
+      </div>
+      <div>
+        <a href="#all-cases"><button class="cases">All Reports</button></a>
+        <a href="#intervention-reports"><button class="cases">Red Flag Reports</button></a>
+        <a href="#red-flag-reports"><button class="cases">Intervention Reports</button></a>
       </div>
       <div id="red-flag-reports">
-          <h3>My Red Flag Reports</h3>
+        <h3>My Red Flag Reports</h3>
         <table>
           <thead>
             <tr>

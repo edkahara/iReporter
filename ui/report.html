@@ -5,14 +5,16 @@
     <title>iReporter | Report</title>
     <link rel="stylesheet" href="styles.css"></link>
     <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+    <script type="text/javascript" src="./script.js"></script>
   </head>
   <body>
-    <div class="topnav">
+    <div class="topnav" id="topnav">
       <a href="./index.html" id="home"><strong>iReporter</strong></a>
       <div class="topnav-right">
         <a href="./profile.html">My Profile</a>
         <a href="./admin.html">Admin Page</a>
         <a href="./login.html">Log Out</a>
+        <a href="javascript:void(0);" class="icon" onclick="getDropdown()">&#9776;</a>
       </div>
     </div>
     <div class="main">
@@ -20,7 +22,7 @@
         <h2>Budalangi Floods</h2>
         <h3>by <a class="show" href="./profile.html">ed</a></h3>
         <div id="report-description">
-          <p><b>Location</b>: Budalangi</p>
+          <p><b>Latitude: </b> -1.265664, <b>Longitude: </b> 36.917248 </p>
           <p><b>Type of Report</b>: Intervention Report</p>
           <p>I am a resident of budalangi. I, along with many of my neighbours, have lost our homes due to floods.</p>
           <p>We are requesting that the government provide the following.</p>
