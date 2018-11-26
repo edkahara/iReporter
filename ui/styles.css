@@ -79,7 +79,7 @@ hr {
   min-height: 100%;
   margin: 50px auto 0;
   text-align: center;
-  width: 1000px;
+  width: 1200px;
 }
 .topnav {
   background-color: #000;
@@ -220,7 +220,7 @@ hr {
 #report-description {
   font-size: 20px;
 }
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1200px) {
   .main, .column, .statistics {
     width: 80%;
   }
