@@ -39,3 +39,29 @@ class RedFlag(Resource):
             return make_response(jsonify({"status": 200, "data": [red_flag]}))
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
+
+class PatchLocation(Resource):
+    def __init__(self):
+        self.red_flags = RedFlagsModel()
+
+    def patch(self, id):
+        data = request.get_json()
+        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        if red_flag:
+            red_flag.update(data)
+            return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's location"}]}))
+        else:
+            return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
+
+class PatchComment(Resource):
+    def __init__(self):
+        self.red_flags = RedFlagsModel()
+
+    def patch(self, id):
+        data = request.get_json()
+        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        if red_flag:
+            red_flag.update(data)
+            return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's comment"}]}))
+        else:
+            return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
