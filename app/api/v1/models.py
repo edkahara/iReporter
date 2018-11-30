@@ -38,3 +38,6 @@ class RedFlagsModel():
 
     def save(self, new_red_flag):
         self.db.append(new_red_flag)
+
+    def remove(self, red_flag_id):
+        self.db = list(filter(lambda x: x["id"] != int(red_flag_id), self.db))
