@@ -12,6 +12,15 @@ class TestRedFlags(TestCase):
         self.app = app.test_client()
         self.app.testing = True
         self.red_flags = RedFlagsModel()
+        self.new_red_flag = {
+            "id": 4,
+            "createdOn":"27-11-2018 09:57",
+            "createdBy": 4,
+            "type": "Red Flag Report",
+            "location": "4,4",
+            "status": "In Draft",
+            "comment": "Undetermined"
+        }
 
     def tearDown(self):
         self.red_flags = None
@@ -22,6 +31,12 @@ class TestRedFlags(TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data, {"status": 200, "data": self.red_flags.db})
+
+    def test_create_a_red_flag(self):
+        response = self.app.post('/api/v1/red-flags', data = json.dumps(self.new_red_flag), content_type = "application/json")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data, {"status": 201, "data": [{"id": 4,"message": "Created red-flag report"}]})
 
     def test_get_specific_red_flag(self):
         """This test ensures that the api endpoint gets a specific red-flag record"""
