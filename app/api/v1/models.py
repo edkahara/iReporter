@@ -35,3 +35,6 @@ class RedFlagsModel():
 
     def get(self):
         return self.db
+
+    def save(self, new_red_flag):
+        self.db.append(new_red_flag)
