@@ -21,6 +21,12 @@ class TestRedFlags(TestCase):
             "status": "In Draft",
             "comment": "Undetermined"
         }
+        self.new_location = {
+            "location": "0,0"
+        }
+        self.new_comment = {
+            "comment": "It was a prank"
+        }
 
     def tearDown(self):
         self.red_flags = None
@@ -45,9 +51,35 @@ class TestRedFlags(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data, {"status": 200, "data": [self.red_flags.db[0]]})
 
+    def test_edit_location_of_specific_red_flag(self):
+        """This test ensures that the api endpoint edits a specific red-flag's location"""
+        response = self.app.patch('/api/v1/red-flag/1/location', data = json.dumps(self.new_location), content_type = "application/json")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's location"}]})
+
+    def test_edit_comment_of_specific_red_flag(self):
+        """This test ensures that the api endpoint edits a specific red-flag's comment"""
+        response = self.app.patch('/api/v1/red-flag/1/comment', data = json.dumps(self.new_comment), content_type = "application/json")
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's comment"}]})
+
     def test_red_flag_not_found(self):
-        """This test ensures that when a specific red-flag record does not exist, we get an error message saying record not found."""
+        """This test ensures that when a specific red-flag record does not exist, we get an error message saying record not found.
+        This test covers all 3 scenarios where we need a specific record: when getting a specific record, when changing a specific
+        record's location and when changing a specific record's comment respectively"""
         response1 = self.app.get('/api/v1/red-flag/0')
         data1 = json.loads(response1.data)
         self.assertEqual(response1.status_code, 404)
         self.assertEqual(data1, {"status": 404, "error": "Red-flag record not found"})
+
+        response2 = self.app.patch('/api/v1/red-flag/0/location')
+        data2 = json.loads(response2.data)
+        self.assertEqual(response2.status_code, 404)
+        self.assertEqual(data2, {"status": 404, "error": "Red-flag record not found"})
+
+        response3 = self.app.patch('/api/v1/red-flag/0/comment')
+        data3 = json.loads(response3.data)
+        self.assertEqual(response3.status_code, 404)
+        self.assertEqual(data3, {"status": 404, "error": "Red-flag record not found"})
