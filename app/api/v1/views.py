@@ -40,6 +40,14 @@ class RedFlag(Resource):
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
 
+    def delete(self, id):
+        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        if red_flag:
+            self.red_flags.remove(id)
+            return make_response(jsonify({"status": 200,"data": [{"id": int(id), "message": "Red-flag record has been deleted"}]}))
+        else:
+            return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
+
 class PatchLocation(Resource):
     def __init__(self):
         self.red_flags = RedFlagsModel()
