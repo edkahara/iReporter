@@ -22,7 +22,7 @@ class RedFlags(Resource):
             "createdBy": data["createdBy"],
             "type": data["type"],
             "location": data["location"],
-            "status": data["status"],
+            "status": "Draft",
             "comment": data["comment"]
         }
         self.red_flags.save(red_flag)
@@ -43,33 +43,34 @@ class RedFlag(Resource):
     def delete(self, id):
         red_flag = self.red_flags.get_specific(id)
         if red_flag:
-            self.red_flags.remove(id)
-            return make_response(jsonify({"status": 200,"data": [{"id": int(id), "message": "Red-flag record has been deleted"}]}))
+            status = red_flag["status"]
+            if status == "Draft":
+                self.red_flags.delete(id)
+                return make_response(jsonify({"status": 200,"data": [{"id": int(id), "message": "Red-flag record has been deleted"}]}))
+            else:
+                return make_response(jsonify({"status": 200, "error": "Red-flag record cannot be deleted because it has already been submitted for investigation."}))
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
 
-class EditLocation(Resource):
+class EditRedFlag(Resource):
     def __init__(self):
         self.red_flags = RedFlagsModel()
 
-    def patch(self, id):
-        data = request.get_json()
+    def patch(self, id, key):
         red_flag = self.red_flags.get_specific(id)
         if red_flag:
-            self.red_flags.edit(red_flag, data)
-            return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's location"}]}))
-        else:
-            return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
-
-class EditComment(Resource):
-    def __init__(self):
-        self.red_flags = RedFlagsModel()
-
-    def patch(self, id):
-        data = request.get_json()
-        red_flag = self.red_flags.get_specific(id)
-        if red_flag:
-            self.red_flags.edit(red_flag, data)
-            return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's comment"}]}))
+            if key == "comment" or key == "location":
+                status = red_flag["status"]
+                if status == "Draft":
+                    data = request.get_json()
+                    self.red_flags.edit(red_flag, data)
+                    return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's {}".format("location" if key == "location" else "comment")}]}))
+                else:
+                    return make_response(jsonify({"status": 200, "error": "Red-flag record cannot be edited because it has already been submitted for investigation."}))
+            else:
+                if key in red_flag:
+                    return make_response(jsonify({"status": 403, "error": "You are not allowed to edit this Red-flag record's {}.".format(key)}), 403)
+                else:
+                    return make_response(jsonify({"status": 400, "error": "This red-flag report does not have a {}, and hence cannot be edited.".format(key)}), 400)
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
