@@ -10,7 +10,7 @@ class RedFlags(Resource):
         self.red_flags = RedFlagsModel()
 
     def get(self):
-        return make_response(jsonify({"status": 200, "data": self.red_flags.db}))
+        return make_response(jsonify({"status": 200, "data": self.red_flags.get_all()}))
 
     def post(self):
         global total_red_flags_ever
@@ -34,14 +34,14 @@ class RedFlag(Resource):
         self.red_flags = RedFlagsModel()
 
     def get(self, id):
-        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        red_flag = self.red_flags.get_specific(id)
         if red_flag:
             return make_response(jsonify({"status": 200, "data": [red_flag]}))
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
 
     def delete(self, id):
-        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        red_flag = self.red_flags.get_specific(id)
         if red_flag:
             self.red_flags.remove(id)
             return make_response(jsonify({"status": 200,"data": [{"id": int(id), "message": "Red-flag record has been deleted"}]}))
@@ -54,9 +54,9 @@ class PatchLocation(Resource):
 
     def patch(self, id):
         data = request.get_json()
-        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        red_flag = self.red_flags.get_specific(id)
         if red_flag:
-            red_flag.update(data)
+            self.red_flags.edit(red_flag, data)
             return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's location"}]}))
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
@@ -67,9 +67,9 @@ class PatchComment(Resource):
 
     def patch(self, id):
         data = request.get_json()
-        red_flag = next(filter(lambda x: x["id"] == int(id), self.red_flags.db), None)
+        red_flag = self.red_flags.get_specific(id)
         if red_flag:
-            red_flag.update(data)
+            self.red_flags.edit(red_flag, data)
             return make_response(jsonify({"status": 200, "data": [{"id": red_flag["id"], "message": "Updated red-flag record's comment"}]}))
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)

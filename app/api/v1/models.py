@@ -33,11 +33,19 @@ class RedFlagsModel():
     def __init__(self):
         self.db = red_flags
 
-    def get(self):
+    def get_all(self):
         return self.db
+
+    def get_specific(self, red_flag_id):
+        correct_red_flag = next(filter(lambda x: x["id"] == int(red_flag_id), self.db), None)
+        return correct_red_flag
 
     def save(self, new_red_flag):
         self.db.append(new_red_flag)
+
+    def edit(self, red_flag, new_data):
+        edited_red_flag = red_flag.update(new_data)
+        return edited_red_flag
 
     def remove(self, red_flag_id):
         self.db = list(filter(lambda x: x["id"] != int(red_flag_id), self.db))
