@@ -25,9 +25,18 @@ red_flags = [
         "location": "3,3",
         "status": "Rejected",
         "comment": "Hurry!"
+    },
+    {
+        "id": 4,
+        "createdOn": "28-11-2018 09:57",
+        "createdBy": 4,
+        "type": "Red Flag Report",
+        "location": "4,4",
+        "status": "Draft",
+        "comment": "Not too urgent!"
     }
 ]
-total_red_flags_ever = 3
+total_red_flags_ever = 4
 
 class RedFlagsModel():
     def __init__(self):
@@ -44,8 +53,7 @@ class RedFlagsModel():
         self.db.append(new_red_flag)
 
     def edit(self, red_flag, new_data):
-        edited_red_flag = red_flag.update(new_data)
-        return edited_red_flag
+        red_flag.update(new_data)
 
-    def remove(self, red_flag_id):
+    def delete(self, red_flag_id):
         self.db = list(filter(lambda x: x["id"] != int(red_flag_id), self.db))
