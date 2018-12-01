@@ -13,11 +13,3 @@ class Testing(Config):
 
 class Production(Config):
     DEBUG = False
-
-
-config = {
-    'development': Development,
-    'testing': Testing,
-    'production': Production,
-    'default': Development
-}

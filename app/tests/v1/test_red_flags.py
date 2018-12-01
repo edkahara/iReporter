@@ -36,34 +36,34 @@ class TestRedFlags(TestCase):
         response = self.app.get('/api/v1/red-flags')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, {"status": 200, "data": self.red_flags.db})
+        self.assertEqual(data, {"status": 200, "data": self.red_flags.get_all()})
+
+    def test_get_specific_red_flag(self):
+        """This test ensures that the api endpoint gets a specific red-flag record"""
+        response = self.app.get('api/v1/red-flag/1')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data, {"status": 200, "data": [self.red_flags.get_specific(1)]})
 
     def test_create_a_red_flag(self):
+        """This test ensures that the api endpoint creates a new red-flag record"""
         response = self.app.post('/api/v1/red-flags', data = json.dumps(self.new_red_flag), content_type = "application/json")
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data, {"status": 201, "data": [{"id": 4,"message": "Created red-flag report"}]})
 
-    def test_get_specific_red_flag(self):
-        """This test ensures that the api endpoint gets a specific red-flag record"""
-        response = self.app.get('/api/v1/red-flag/1')
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, {"status": 200, "data": [self.red_flags.db[0]]})
+    def test_edit_a_specific_red_flag(self):
+        """This test ensures that the api endpoint edits a specific red-flag. This test covers 2 scenarios: changing the location
+        and changing the comment of a red-flag respectively"""
+        response1 = self.app.patch('/api/v1/red-flag/1/location', data = json.dumps(self.new_location), content_type = "application/json")
+        data1 = json.loads(response1.data)
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(data1, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's location"}]})
 
-    def test_edit_location_of_specific_red_flag(self):
-        """This test ensures that the api endpoint edits a specific red-flag's location"""
-        response = self.app.patch('/api/v1/red-flag/1/location', data = json.dumps(self.new_location), content_type = "application/json")
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's location"}]})
-
-    def test_edit_comment_of_specific_red_flag(self):
-        """This test ensures that the api endpoint edits a specific red-flag's comment"""
-        response = self.app.patch('/api/v1/red-flag/1/comment', data = json.dumps(self.new_comment), content_type = "application/json")
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's comment"}]})
+        response2 = self.app.patch('/api/v1/red-flag/1/comment', data = json.dumps(self.new_comment), content_type = "application/json")
+        data2 = json.loads(response2.data)
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(data2, {"status": 200, "data": [{"id": 1, "message": "Updated red-flag record's comment"}]})
 
     def test_delete_a_specific_red_flag(self):
         """This test ensures that the api endpoint deletes a specific red-flag record"""
