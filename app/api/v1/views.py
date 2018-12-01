@@ -48,7 +48,7 @@ class RedFlag(Resource):
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
 
-class PatchLocation(Resource):
+class EditLocation(Resource):
     def __init__(self):
         self.red_flags = RedFlagsModel()
 
@@ -61,7 +61,7 @@ class PatchLocation(Resource):
         else:
             return make_response(jsonify({"status": 404, "error": "Red-flag record not found"}), 404)
 
-class PatchComment(Resource):
+class EditComment(Resource):
     def __init__(self):
         self.red_flags = RedFlagsModel()
 
