@@ -5,12 +5,12 @@ Here are the API endpoints which you must add to the heroku app link (https://ed
 
 GET all records: /api/v1/red-flags
 
-GET specific record: /api/v1/red-flags/<id>
+GET a specific record: /api/v1/red-flags/<id>
 
-POST a record: /api/v1/red-flags
+POST (create) a new record: /api/v1/red-flags
 
-Edit a record's location: /api/v1/red-flags/<id>/location
+PATCH (edit) a specific record's location: /api/v1/red-flags/<id>/location
 
-Edit a record's comment: /api/v1/red-flags/<id>/comment
+PATCH (edit) a specific record's comment: /api/v1/red-flags/<id>/comment
 
-Delete a record: /api/v1/red-flags/<id>
+DELETE a specific record: /api/v1/red-flags/<id>
