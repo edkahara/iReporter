@@ -10,7 +10,7 @@ class TestReports(TestCase):
         self.app = app.test_client()
         self.app.testing = True
         self.new_user_same_passwords = {
-            "id": 4,
+            "id": 1,
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraicho@gmail.com",
@@ -22,7 +22,7 @@ class TestReports(TestCase):
 	         "password_confirmation": "boraicho"
         }
         self.new_user_different_passwords = {
-            "id": 4,
+            "id": 1,
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraicho@gmail.com",
@@ -32,6 +32,10 @@ class TestReports(TestCase):
              "isAdmin": False,
 	         "password": "boraicho",
 	         "password_confirmation": "bo rai cho"
+        }
+        self.new_user_login_correct_details = {
+            "username": "boraicho",
+            "password": "boraicho"
         }
 
     def test_sign_up_successful(self):
@@ -43,3 +47,12 @@ class TestReports(TestCase):
         response = self.app.post('/api/v1/users/signup', json = self.new_user_different_passwords)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
+
+    def test_log_in_successful(self):
+        response = self.app.post('/api/v1/users/signup', json = self.new_user_same_passwords)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+
+        response = self.app.post('/api/v1/users/login', json = self.new_user_login_correct_details)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
