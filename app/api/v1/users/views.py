@@ -1,7 +1,8 @@
 import datetime
-from flask import Flask, request
+from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .models import UsersModel
 
@@ -39,6 +40,7 @@ class UserSignup(BaseUsers):
         }
         if user["password"] == user["password_confirmation"]:
             del user["password_confirmation"]
+            user["password"] = generate_password_hash(user["password"])
             self.users.sign_up(user)
             return {"status": 201, "data": [{"id": user["id"], "message": "User Created."}]}, 201
         else:
@@ -60,7 +62,7 @@ class UserLogin(BaseUsers):
         }
         user_to_log_in = self.users.get_specific(user["username"])
         if user_to_log_in:
-            if user_to_log_in["password"] == user["password"]:
+            if check_password_hash(user_to_log_in["password"], user["password"]):
                 access_token = create_access_token(user["username"], expires_delta=datetime.timedelta(days=1))
                 return {"status": 200, "data": [{"id": user_to_log_in["id"], "access_token": access_token, "message": "User Logged In."}]}
             else:

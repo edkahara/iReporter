@@ -1,5 +1,3 @@
-SECRET_KEY='mysecretkey'
-
 class Config:
     DEBUG = False
     TESTING = False

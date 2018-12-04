@@ -6,8 +6,8 @@ class ReportsModel:
         self.db = reports
         self.total_reports_created = total_reports_created
 
-    def get_all(self):
-        return reports
+    def get_all(self, user):
+        return list(filter(lambda x: x["createdBy"] == user, reports))
 
     def get_specific(self, report_id):
         return next(filter(lambda x: x["id"] == int(report_id), reports), None)
