@@ -1,11 +1,13 @@
 from flask import Blueprint
 from flask_restful import Api, Resource
 
-from .views import RedFlags, RedFlag, EditRedFlag
+from .reports.views import Reports, Report, EditReport
+from .users.views import UserSignup
 
 version_one = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 api = Api(version_one)
 
-api.add_resource(RedFlags, '/red-flags')
-api.add_resource(RedFlag, '/red-flags/<id>')
-api.add_resource(EditRedFlag, '/red-flags/<id>/<key>')
+api.add_resource(Reports, '/reports')
+api.add_resource(Report, '/reports/<id>')
+api.add_resource(EditReport, '/reports/<id>/<key>')
+api.add_resource(UserSignup, '/users/signup')
