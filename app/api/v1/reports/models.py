@@ -1,8 +1,10 @@
 reports = []
+total_reports_created = 1
 
 class ReportsModel:
     def __init__(self):
         self.db = reports
+        self.total_reports_created = total_reports_created
 
     def get_all(self):
         return reports
@@ -12,6 +14,7 @@ class ReportsModel:
 
     def save(self, new_report):
         reports.append(new_report)
+        self.total_reports_created += 1
 
     def edit(self, report, new_data):
         report.update(new_data)

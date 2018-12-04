@@ -9,5 +9,4 @@ def create_app():
     app.config.from_object('instance.config')
     app.register_blueprint(v1)
     jwt = JWTManager(app)
-    app.config['JWT_SECRET_KEY'] = 'edkahara'
     return app
