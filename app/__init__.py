@@ -1,19 +1,15 @@
 import os
-from flask import Flask, Blueprint
-from flask_restful import Resource, Api
-from flask_jwt_extended import JWTManager
-from dotenv import load_dotenv
+from flask import Flask
 
-from .api.v1 import version_one as v1
+from app.api.v2.models.dbmodel import DBModel
+from instance.config import config
 
-APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
-dotenv_path = os.path.join(APP_ROOT, '.env')
-load_dotenv(dotenv_path)
-
-def create_app():
+def create_app(config_name):
     app = Flask(__name__)
-    app.config.from_object('instance.config')
-    app.register_blueprint(v1)
-    jwt = JWTManager(app)
-    app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config.from_object(config[config_name])
+    with app.app_context():
+        db = DBModel()
+        db.connectToDB()
+        db.create_reports_table()
+        db.create_users_table()
     return app
