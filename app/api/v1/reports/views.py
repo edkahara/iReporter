@@ -29,6 +29,7 @@ class Reports(BaseReports):
         )
         parser.add_argument('location', type=str, location="json", help='Location cannot be blank.', required=True)
         parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
+        parser.add_argument('status', type=str, location="json", help='Status cannot be blank.', required=True)
         args = parser.parse_args()
 
         data = request.get_json()
