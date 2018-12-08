@@ -1,14 +1,43 @@
+import datetime
+
 users = []
-total_users_created = 1
 
 class UsersModel:
-    def __init__(self):
-        self.db = users
-        self.total_users_created = total_users_created
+    total_users_created = 1
 
-    def get_specific(self, username):
-        return next(filter(lambda x: x["username"] == username, self.db), None)
+    def __init__(self, firstname, lastname, email, phonenumber, username, password, password_confirmation):
+        self.id = UsersModel.total_users_created
+        self.registered = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+        self.isadmin = False
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
+        self.phonenumber = phonenumber
+        self.username = username
+        self.password = password
+        self.password_confirmation = password_confirmation
 
-    def sign_up(self, new_user):
-        self.db.append(new_user)
-        self.total_users_created += 1
+        UsersModel.total_users_created += 1
+
+    def json(self):
+        return {
+            "id": self.id,
+            "registered": self.registered,
+            "isadmin": self.isadmin,
+            "firstname": self.firstname,
+            "lastname": self.lastname,
+            "email": self.email,
+            "phonenumber": self.phonenumber,
+            "username": self.username,
+            "password": self.password
+        }
+
+    def get_specific_user(key, value):
+        return next(filter(lambda x: x.json()[key] == value, users), None)
+
+    def sign_up(self):
+        users.append(self)
+
+    def clear():
+        users.clear()
+        UsersModel.total_users_created = 1
