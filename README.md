@@ -11,11 +11,11 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 * Users can view, create, edit and delete their reports.
 
 * Users can create two types of reports:
-  - red-flag report: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
+  - Red-Flag: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
 
-  - intervention report: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
+  - Intervention: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
 
-* In a report, a user can post and edit both the location of the incident and a comment on the incident.
+* A user can edit both the location and the comment of a report they created.
 
 * All stories are reviewed by administrators, who can either place them under investigation, resolve them or reject them.
 
@@ -29,15 +29,17 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
   `py -3 -m venv env`
 
-### Create an env.bat file that using env.example as a template
-
 ### Activate the virtual environment
 
-  `env.bat`
+  `env\Scripts\activate`
 
-### Install dependencies needed
+### Install  all the packages and dependencies needed
 
   `pip install -r requirements.txt`
+
+### Create an env.bat file using env.example as a template and then run
+
+  `env.bat`
 
 ### Run the application
 
@@ -45,7 +47,7 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 ### Test the application
 
-  `nosetests`
+  `nosetests` or `nosetests --with-coverage --cover-package=app` to see the test coverage
 
 ## Endpoints to test
 
