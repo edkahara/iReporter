@@ -26,10 +26,18 @@ class Reports(Resource):
         parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
         parser.add_argument('status', type=str, location="json", help='Status cannot be blank.', required=True)
         data = parser.parse_args()
+        report = {
+            "id": ReportsModel.total_reports_created,
+            "createdOn": datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
+            "reporter": current_user,
+            "type": data["type"],
+            "location": data["location"],
+            "status": data["status"],
+            "comment": data["comment"],
+        }
         if data["type"] == ("Red-Flag" or "Intervention"):
-            report = ReportsModel(current_user,**data)
-            report.save()
-            return {"status": 201, "data": [{"report": report.json(), "message": "Created report."}]}, 201
+            ReportsModel.save(report)
+            return {"status": 201, "data": [{"report": report, "message": "Created report."}]}, 201
         else:
             return {"status": 400, "error": "Report type can only be strictly either 'Red-Flag' or 'Intervention'."}, 400
 
@@ -39,8 +47,8 @@ class Report(Resource):
     def get(self, id):
         current_user = get_jwt_identity()
         report = ReportsModel.get_specific_report(id)
-        if report and report.reporter == current_user:
-            return {"status": 200, "data": [report.json()]}
+        if report and report["reporter"] == current_user:
+            return {"status": 200, "data": [report]}
         else:
             return ({"status": 404, "error": "Report not found."}, 404)
 
@@ -48,10 +56,10 @@ class Report(Resource):
     def delete(self, id):
         current_user = get_jwt_identity()
         report = ReportsModel.get_specific_report(id)
-        if report and report.reporter == current_user:
-            if report.status == "Draft":
+        if report and report['reporter'] == current_user:
+            if report['status'] == "Draft":
                 ReportsModel.delete(report)
-                return {"status": 200,"data": [{"id": int(id), "message": "Report has been deleted."}]}
+                return {"status": 200,"data": [{"id": id, "message": "Report has been deleted."}]}
             else:
                 return {"status": 405, "error": "Report cannot be deleted because it has already been submitted."}, 405
         else:
@@ -63,8 +71,8 @@ class EditReport(Resource):
     def patch(self, id, key):
         current_user = get_jwt_identity()
         report = ReportsModel.get_specific_report(id)
-        if report and report.reporter == current_user:
-            if report.status == "Draft":
+        if report and report['reporter'] == current_user:
+            if report['status'] == "Draft":
                 parser = reqparse.RequestParser()
                 if key == "location":
                     parser.add_argument('location', type=str, location="json", help='Location cannot be blank.', required=True)
@@ -72,7 +80,7 @@ class EditReport(Resource):
                     parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
                 data = parser.parse_args()
                 ReportsModel.edit(id, data)
-                return {"status": 200, "data": [{"report": report.json(), "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
+                return {"status": 200, "data": [{"report": report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
             else:
                 return {"status": 405, "error": "Report cannot be edited because it has already been submitted."}, 405
         else:

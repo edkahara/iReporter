@@ -83,6 +83,42 @@ class BaseTests(TestCase):
             "password": "boraicho"
         }
 
+    def createAccountForTestingUsers(self):
+        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1), "message": "User Created."}]})
+
+
+    def signUpForTestingReports(self):
+        return self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
+
+
+    def logInForTestingReports(self):
+        response = self.app.post('/api/v1/auth/login', json = self.new_user_login_correct_details)
+        data = json.loads(response.data)
+        return data["data"][0]["access_token"]
+
+
+    def createReportInDraftForTestingReports(self):
+        self.signUpForTestingReports()
+        access_token = self.logInForTestingReports()
+
+        response = self.app.post('/api/v1/reports', json = self.report_in_draft, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data, {"status": 201, "data": [{"report": ReportsModel.get_specific_report(1),"message": "Created report."}]})
+
+
+    def createReportNotInDraftForTestingReports(self):
+        self.signUpForTestingReports()
+        access_token = self.logInForTestingReports()
+
+        response = self.app.post('/api/v1/reports', json = self.report_not_in_draft, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data, {"status": 201, "data": [{"report": ReportsModel.get_specific_report(1),"message": "Created report."}]})
+
 
     def tearDown(self):
         ReportsModel.clear()

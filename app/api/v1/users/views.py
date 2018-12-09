@@ -20,17 +20,28 @@ class UserSignup(Resource):
         parser.add_argument('password_confirmation', type=str, location="json", help = 'Password confirmation cannot be blank.', required = True)
         data = parser.parse_args()
 
-        user = UsersModel(**data)
-        existing_user_by_username = UsersModel.get_specific_user('username', user.username)
-        existing_user_by_email = UsersModel.get_specific_user('email', user.email)
+        user = {
+            "id": UsersModel.total_users_created,
+            "registered": now.strftime("%d-%m-%Y %H:%M"),
+            "firstname": data["firstname"],
+            "lastname": data["lastname"],
+            "email": data["email"],
+            "phoneNumber": data["phonenumber"],
+            "username": data["username"],
+            "isAdmin": False,
+            "password": data["password"],
+            "password_confirmation": data["password_confirmation"]
+        }
+        existing_user_by_username = UsersModel.get_specific_user('username', user['username'])
+        existing_user_by_email = UsersModel.get_specific_user('email', user['email'])
         if existing_user_by_email or existing_user_by_username:
             return {"status": 401, "error": "This {} is taken".format("email" if existing_user_by_email else "username")}, 401
         else:
-            if user.password == user.password_confirmation:
-                del user.password_confirmation
-                user.password = generate_password_hash(user.password)
-                user.sign_up()
-                return {"status": 201, "data": [{"user": user.json(), "message": "User Created."}]}, 201
+            if user["password"] == user["password_confirmation"]:
+                del user['password_confirmation']
+                user['password'] = generate_password_hash(user['password'])
+                UsersModel.sign_up(user)
+                return {"status": 201, "data": [{"user": user, "message": "User Created."}]}, 201
             else:
                 return {"status": 401, "error": "Password and Password confirmation do not match."}, 401
 
@@ -47,9 +58,9 @@ class UserLogin(Resource):
         }
         user_to_log_in = UsersModel.get_specific_user('username', user["username"])
         if user_to_log_in:
-            if check_password_hash(user_to_log_in.password, user["password"]):
+            if check_password_hash(user_to_log_in['password'], user["password"]):
                 access_token = create_access_token(user["username"], expires_delta=datetime.timedelta(minutes=60))
-                return {"status": 200, "data": [{"user": user_to_log_in.json(), "access_token": access_token, "message": "User Logged In."}]}
+                return {"status": 200, "data": [{"user": user_to_log_in, "access_token": access_token, "message": "User Logged In."}]}
             else:
                 return {"status": 401, "error": "The password you entered is incorrect."}, 401
         else:

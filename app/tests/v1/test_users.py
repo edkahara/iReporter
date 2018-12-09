@@ -8,7 +8,7 @@ class TestReports(BaseTests):
         response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1), "message": "User Created."}]})
 
 
     def test_sign_up_unsuccessful_different_passwords(self):
@@ -19,10 +19,7 @@ class TestReports(BaseTests):
 
 
     def test_sign_up_unsuccessful_taken_email(self):
-        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.createAccountForTestingUsers()
 
         response = self.app.post('/api/v1/auth/signup', json = self.new_user_taken_email)
         data = json.loads(response.data)
@@ -31,10 +28,7 @@ class TestReports(BaseTests):
 
 
     def test_sign_up_unsuccessful_taken_username(self):
-        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.createAccountForTestingUsers()
 
         response = self.app.post('/api/v1/auth/signup', json = self.new_user_taken_username)
         data = json.loads(response.data)
@@ -43,23 +37,17 @@ class TestReports(BaseTests):
 
 
     def test_log_in_successful(self):
-        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.createAccountForTestingUsers()
 
         response = self.app.post('/api/v1/auth/login', json = self.new_user_login_correct_details)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["data"][0]["user"], UsersModel.get_specific_user('id', 1).json())
+        self.assertEqual(data["data"][0]["user"], UsersModel.get_specific_user('id', 1))
         self.assertEqual(data["data"][0]["message"], "User Logged In.")
 
 
     def test_log_in_unsuccessful_incorrect_password(self):
-        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.createAccountForTestingUsers()
 
         response = self.app.post('/api/v1/auth/login', json = self.new_user_login_incorrect_password)
         data = json.loads(response.data)
@@ -68,10 +56,7 @@ class TestReports(BaseTests):
 
 
     def test_log_in_unsuccessful_nonexistent_username(self):
-        response = self.app.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data, {"status": 201, "data": [{"user": UsersModel.get_specific_user('id', 1).json(), "message": "User Created."}]})
+        self.createAccountForTestingUsers()
 
         response = self.app.post('/api/v1/auth/login', json = self.new_user_login_nonexistent_username)
         data = json.loads(response.data)
