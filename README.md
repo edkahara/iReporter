@@ -8,7 +8,7 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 * Users can create accounts and log in.
 
-* Users can create, edit, or delete their reports.
+* Users can view, create, edit and delete their reports.
 
 * Users can create two types of reports:
   - red-flag report: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
