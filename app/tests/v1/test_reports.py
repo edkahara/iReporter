@@ -34,7 +34,7 @@ class TestReports(BaseTests):
         self.assertEqual(data, {"status": 200, "data": ReportsModel.get_all_reports("boraicho")})
 
 
-    def test_get_a_specific_red_flag(self):
+    def test_get_a_specific_report(self):
         self.signUpForTestingReports()
         access_token = self.logInForTestingReports()
         self.createReportInDraftForTestingReports()
