@@ -8,14 +8,14 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 * Users can create accounts and log in.
 
-* Users can create, edit, or delete their reports.
+* Users can view, create, edit and delete their reports.
 
 * Users can create two types of reports:
-  - red-flag report: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
+  - Red-Flag: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
 
-  - intervention report: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
+  - Intervention: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
 
-* In a report, a user can post and edit both the location of the incident and a comment on the incident.
+* A user can edit both the location and the comment of a report they created.
 
 * All stories are reviewed by administrators, who can either place them under investigation, resolve them or reject them.
 
@@ -33,37 +33,40 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
   `env\Scripts\activate`
 
-### Install dependencies needed
+### Install  all the packages and dependencies needed
 
   `pip install -r requirements.txt`
 
-## Create a .env file in the root directory and add the following:
+### Create an env.bat file using env.example as a template and then run
 
-  `FLASK_APP=run.py`
-
-  `FLASK_ENV='development'`
+  `env.bat`
 
 ### Run the application
+
   `flask run`
 
 ### Test the application
-  `nosetests`
+
+  `nosetests` or `nosetests --with-coverage --cover-package=app` to see the test coverage
 
 ## Endpoints to test
 
-Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter.herokuapp.com/) or your local server using POSTMAN:
+Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter.herokuapp.com) or your local server using POSTMAN:
 
-|    METHOD   |   ENDPOINT                              | DESCRIPTION                           |    
-|-------------|-----------------------------------------|---------------------------------------|
-|   POST      |    /api/v1/users/signup                 |   Sign a user up                      |
-|   POST      |    /api/v1/users/signup                 |   Log a user in                       |
-|   POST      |    /api/v1/reports/                     |   Create a new report                 |
-|   GET       |    /api/v1/reports/                     |   Fetch all existing reports          |
-|   GET       |    /api/v1/reports/&lt;id&gt;           |   Fetch a specific report by its id   |
-|   PATCH     |    /api/v1/reports/&lt;id&gt;/location  |   Edit a specific report's location   |
-|   PATCH     |    /api/v1/reports/&lt;id&gt;/comment   |   Edit a specific report's comment    |
-|   DELETE    |    /api/v1/reports/&lt;id&gt;           |   Delete a specific report            |
+|    METHOD   |   ENDPOINT                                  | DESCRIPTION                           |    
+|-------------|---------------------------------------------|---------------------------------------|
+|   POST      |    /api/v1/auth/signup                      |   Sign a user up                      |
+|   POST      |    /api/v1/auth/signup                      |   Log a user in                       |
+|   POST      |    /api/v1/reports/                         |   Create a new report                 |
+|   GET       |    /api/v1/reports/                         |   Fetch all existing reports          |
+|   GET       |    /api/v1/reports/&lt;int:id&gt;           |   Fetch a specific report by its id   |
+|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/location  |   Edit a specific report's location   |
+|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/comment   |   Edit a specific report's comment    |
+|   DELETE    |    /api/v1/reports/&lt;int:id&gt;           |   Delete a specific report            |
 
+## API Docs
+
+You can view the API documentation on https://documenter.getpostman.com/view/5360822/RzfiGTp4
 
 # Author
 
