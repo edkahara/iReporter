@@ -43,7 +43,7 @@ class BaseTests(TestCase):
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraicho@gmail.com",
-	         "phonenumber": "0123456789",
+	         "phonenumber": "+2540123456789",
 	         "username": "boraicho",
 	         "password": "boraicho",
 	         "password_confirmation": "boraicho"
@@ -52,7 +52,7 @@ class BaseTests(TestCase):
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraicho@gmail.com",
-	         "phonenumber": "0123456789",
+	         "phonenumber": "+2540123456789",
 	         "username": "boraicho",
 	         "password": "boraicho",
 	         "password_confirmation": "bo rai cho"
@@ -61,7 +61,7 @@ class BaseTests(TestCase):
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraicho@gmail.com",
-	         "phonenumber": "0123456789",
+	         "phonenumber": "+2540123456789",
 	         "username": "boraico",
 	         "password": "boraicho",
 	         "password_confirmation": "boraicho"
@@ -70,7 +70,7 @@ class BaseTests(TestCase):
             "firstname": "Bo",
 	         "lastname": "Rai Cho",
 	         "email": "boraico@gmail.com",
-	         "phonenumber": "0123456789",
+	         "phonenumber": "+2540123456789",
 	         "username": "boraicho",
 	         "password": "boraicho",
 	         "password_confirmation": "boraicho"

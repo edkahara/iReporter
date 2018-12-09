@@ -1,6 +1,7 @@
+import re
 import datetime
 from flask import request
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -11,13 +12,19 @@ now = datetime.datetime.now()
 class UserSignup(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('firstname', type=str, location="json", help = 'First Name cannot be blank.', required = True)
-        parser.add_argument('lastname', type=str, location="json", help = 'Last Name cannot be blank.', required = True)
-        parser.add_argument('email', type=str, location="json", help = 'Email cannot be blank.', required = True)
-        parser.add_argument('phonenumber', type=str, location="json", help = 'Phone Number cannot be blank.', required = True)
-        parser.add_argument('username', type=str, location="json", help = 'Username cannot be blank.', required = True)
-        parser.add_argument('password', type=str, location="json", help = 'Password cannot be blank.', required = True)
-        parser.add_argument('password_confirmation', type=str, location="json", help = 'Password confirmation cannot be blank.', required = True)
+        parser.add_argument('firstname', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="First Name cannot be blank.")
+        parser.add_argument('lastname', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Last Name cannot be blank.")
+        parser.add_argument('password', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Password cannot be blank.")
+        parser.add_argument('password_confirmation', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Password confirmation cannot be blank.")
+        parser.add_argument('email', required=True, location="json", type=inputs.regex(r'^[a-z0-9](\.?[a-z0-9]){0,}@([a-z]){0,}\.com$'),
+            help="Email can only be strictly of the following format: (letters or numbers or both with only one optional dot in-between)@(only letters).com."
+        )
+        parser.add_argument('phonenumber', required=True, location="json", type=inputs.regex(r'^(\+\d+)$'),
+            help="Phone Number can only be strictly of the following format: +(country code)(number)."
+        )
+        parser.add_argument('username', required=True, location="json", type=inputs.regex(r'^([a-z0-9_]){5,25}'),
+            help="Username can only be strictly between 5 and 25 characters long and can only contain lowercase letters, numbers and underscores."
+        )
         data = parser.parse_args()
 
         user = {
@@ -49,8 +56,8 @@ class UserSignup(Resource):
 class UserLogin(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('username', type=str, location="json", help = 'Username cannot be blank.', required = True)
-        parser.add_argument('password', type=str, location="json", help = 'Password cannot be blank.', required = True)
+        parser.add_argument('username', required=True, location="json", type=str, help='Username cannot be blank.')
+        parser.add_argument('password', required=True, location="json", type=str, help='Password cannot be blank.')
         data = parser.parse_args()
         user = {
             "username": data["username"],

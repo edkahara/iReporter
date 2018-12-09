@@ -12,6 +12,7 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data, {"status": 201, "data": [{"report": ReportsModel.get_specific_report(1),"message": "Created report."}]})
+        
 
     def test_invalid_report_type(self):
         self.signUpForTestingReports()
@@ -21,7 +22,7 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data, {"message": {"type": "Type can only be strictly either 'Red-Flag' or 'Intervention'."}})
-        
+
 
     def test_invalid_report_status(self):
         self.signUpForTestingReports()

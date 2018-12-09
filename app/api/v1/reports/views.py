@@ -1,21 +1,12 @@
+import re
 import datetime
 from flask import request
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from .models import ReportsModel
 
 now = datetime.datetime.now()
-
-def correct_type_format(type):
-    if not type:
-        raise ValueError()
-    return type
-
-def correct_status_format(status):
-    if not status:
-        raise ValueError()
-    return status
 
 class Reports(Resource):
     @jwt_required
@@ -27,18 +18,18 @@ class Reports(Resource):
     def post(self):
         current_user = get_jwt_identity()
         parser = reqparse.RequestParser()
-        parser.add_argument('location', type=str, location="json", help='Location cannot be blank.', required=True)
-        parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
-        parser.add_argument('type',
-            choices=("Red-Flag, Intervention"),
-            type=correct_type_format, location="json", required=True,
+        parser.add_argument('comment', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Comment cannot be blank.")
+        parser.add_argument('location', required=True, location="json", type=inputs.regex(r'^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$'),
+            help="Location can only be strictly of the form 'number,number'. A number can have a negative '-' before the number and a decimal point."
+        )
+        parser.add_argument('type', location="json", required=True, type=inputs.regex(r'^\b(Red-Flag|Intervention)\b$'),
             help="Type can only be strictly either 'Red-Flag' or 'Intervention'."
         )
-        parser.add_argument('status', required=True, location="json",
-            choices=("Draft, Under Investigation, Resolved, Rejected"), type=correct_status_format,
+        parser.add_argument('status', required=True, location="json", type=inputs.regex(r'^\b(Draft|Under Investigation|Resolved|Rejected)\b$'),
             help="Status can only be strictly either 'Draft' or 'Under Investigation' or 'Resolved' or 'Rejected'."
         )
         data = parser.parse_args()
+
         report = {
             "id": ReportsModel.total_reports_created,
             "createdOn": datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
@@ -88,9 +79,12 @@ class EditReport(Resource):
             if report['status'] == "Draft":
                 parser = reqparse.RequestParser()
                 if key == "location":
-                    parser.add_argument('location', type=str, location="json", help='Location cannot be blank.', required=True)
+                    parser.add_argument('location', required=True, location="json", type=inputs.regex(r'^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$'),
+                        help="Location can only be strictly of the form 'number,number'. A number can have a negative '-' before the number and a decimal point."
+                    )
                 else:
-                    parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
+                    parser.add_argument('comment', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Comment cannot be blank.")
+                    
                 data = parser.parse_args()
                 ReportsModel.edit(id, data)
                 return {"status": 200, "data": [{"report": report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
