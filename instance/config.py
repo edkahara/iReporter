@@ -12,15 +12,11 @@ class Testing(Config):
     TESTING = True
     DEBUG = True
 
-class Staging(Config):
-    DEBUG = True
-
 class Production(Config):
     DEBUG = False
 
 config = {
     'development': Development,
     'production': Production,
-    'staging': Staging,
     'testing': Testing
 }

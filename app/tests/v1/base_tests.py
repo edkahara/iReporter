@@ -27,6 +27,12 @@ class BaseTests(TestCase):
             "status": "Resolved",
             "comment": "Undetermined"
         }
+        self.report_with_invalid_status = {
+            "type": "Red-Flag",
+            "location": "1,1",
+            "status": "",
+            "comment": "Undetermined"
+        }
         self.new_location = {
             "location": "0,0"
         }

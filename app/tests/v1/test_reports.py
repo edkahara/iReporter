@@ -20,7 +20,17 @@ class TestReports(BaseTests):
         response = self.test_client.post('/api/v1/reports', json = self.report_with_invalid_type, headers=dict(Authorization="Bearer " + access_token))
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data, {"status": 400, "error": "Report type can only be strictly either 'Red-Flag' or 'Intervention'."})
+        self.assertEqual(data, {"message": {"type": "Type can only be strictly either 'Red-Flag' or 'Intervention'."}})
+        
+
+    def test_invalid_report_status(self):
+        self.signUpForTestingReports()
+        access_token = self.logInForTestingReports()
+
+        response = self.test_client.post('/api/v1/reports', json = self.report_with_invalid_status, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data, {"message": {"status": "Status can only be strictly either 'Draft' or 'Under Investigation' or 'Resolved' or 'Rejected'."}})
 
 
     def test_get_all_reports(self):

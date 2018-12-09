@@ -7,6 +7,16 @@ from .models import ReportsModel
 
 now = datetime.datetime.now()
 
+def correct_type_format(type):
+    if not type:
+        raise ValueError()
+    return type
+
+def correct_status_format(status):
+    if not status:
+        raise ValueError()
+    return status
+
 class Reports(Resource):
     @jwt_required
     def get(self):
@@ -17,14 +27,17 @@ class Reports(Resource):
     def post(self):
         current_user = get_jwt_identity()
         parser = reqparse.RequestParser()
-        parser.add_argument('type',
-            choices=("Red-Flag, Intervention"),
-            type=str, location="json", required=True,
-            help="Report type can only be strictly either 'Red-Flag' or 'Intervention'."
-        )
         parser.add_argument('location', type=str, location="json", help='Location cannot be blank.', required=True)
         parser.add_argument('comment', type=str, location="json", help='Comment cannot be blank.', required=True)
-        parser.add_argument('status', type=str, location="json", help='Status cannot be blank.', required=True)
+        parser.add_argument('type',
+            choices=("Red-Flag, Intervention"),
+            type=correct_type_format, location="json", required=True,
+            help="Type can only be strictly either 'Red-Flag' or 'Intervention'."
+        )
+        parser.add_argument('status', required=True, location="json",
+            choices=("Draft, Under Investigation, Resolved, Rejected"), type=correct_status_format,
+            help="Status can only be strictly either 'Draft' or 'Under Investigation' or 'Resolved' or 'Rejected'."
+        )
         data = parser.parse_args()
         report = {
             "id": ReportsModel.total_reports_created,
