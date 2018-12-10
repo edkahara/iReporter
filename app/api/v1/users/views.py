@@ -7,8 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .models import UsersModel
 
-now = datetime.datetime.now()
-
 class UserSignup(Resource):
     def post(self):
         parser = reqparse.RequestParser()
@@ -29,7 +27,7 @@ class UserSignup(Resource):
 
         user = {
             "id": UsersModel.total_users_created,
-            "registered": now.strftime("%d-%m-%Y %H:%M"),
+            "registered": datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
             "firstname": data["firstname"],
             "lastname": data["lastname"],
             "email": data["email"],

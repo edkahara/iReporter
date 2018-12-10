@@ -6,8 +6,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from .models import ReportsModel
 
-now = datetime.datetime.now()
-
 class Reports(Resource):
     @jwt_required
     def get(self):
