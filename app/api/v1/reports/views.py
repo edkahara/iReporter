@@ -39,11 +39,8 @@ class Reports(Resource):
             "status": data["status"],
             "comment": data["comment"],
         }
-        if data["type"] == ("Red-Flag" or "Intervention"):
-            ReportsModel.save(report)
-            return {"status": 201, "data": [{"report": report, "message": "Created report."}]}, 201
-        else:
-            return {"status": 400, "error": "Report type can only be strictly either 'Red-Flag' or 'Intervention'."}, 400
+        ReportsModel.save(report)
+        return {"status": 201, "data": [{"report": report, "message": "Created report."}]}, 201
 
 
 class Report(Resource):
@@ -84,7 +81,7 @@ class EditReport(Resource):
                     )
                 else:
                     parser.add_argument('comment', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Comment cannot be blank.")
-                    
+
                 data = parser.parse_args()
                 ReportsModel.edit(id, data)
                 return {"status": 200, "data": [{"report": report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
