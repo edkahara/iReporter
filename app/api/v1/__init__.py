@@ -7,8 +7,8 @@ from .users.views import UserSignup, UserLogin
 version_one = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 api = Api(version_one)
 
-api.add_resource(Reports, '/reports')
-api.add_resource(Report, '/reports/<int:id>')
-api.add_resource(EditReport, '/reports/<int:id>/<key>')
-api.add_resource(UserSignup, '/auth/signup')
-api.add_resource(UserLogin, '/auth/login')
+api.add_resource(Reports, '/reports', strict_slashes=False)
+api.add_resource(Report, '/reports/<int:id>', strict_slashes=False)
+api.add_resource(EditReport, '/reports/<int:id>/<key>', strict_slashes=False)
+api.add_resource(UserSignup, '/auth/signup', strict_slashes=False)
+api.add_resource(UserLogin, '/auth/login', strict_slashes=False)
