@@ -16,13 +16,13 @@ class UserSignup(Resource):
         parser.add_argument('lastname', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Last Name cannot be blank.")
         parser.add_argument('password', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Password cannot be blank.")
         parser.add_argument('password_confirmation', required=True, location="json", type=inputs.regex(r'^(?!\s*$).+'), help="Password confirmation cannot be blank.")
-        parser.add_argument('email', required=True, location="json", type=inputs.regex(r'^[a-z0-9](\.?[a-z0-9]){0,}@([a-z]){0,}\.com$'),
+        parser.add_argument('email', required=True, location="json", type=inputs.regex(r'^[a-z0-9](\.?[a-z0-9]){0,}@([a-z]){1,}\.com$'),
             help="Email can only be strictly of the following format: (letters or numbers or both with only one optional dot in-between)@(only letters).com."
         )
         parser.add_argument('phonenumber', required=True, location="json", type=inputs.regex(r'^(\+\d+)$'),
-            help="Phone Number can only be strictly of the following format: +(country code)(number)."
+            help="Phone Number can only be strictly of the following format: +(country code)(rest of the phonenumber)."
         )
-        parser.add_argument('username', required=True, location="json", type=inputs.regex(r'^([a-z0-9_]){5,25}'),
+        parser.add_argument('username', required=True, location="json", type=inputs.regex(r'^([a-z0-9_]){5,25}$'),
             help="Username can only be strictly between 5 and 25 characters long and can only contain lowercase letters, numbers and underscores."
         )
         data = parser.parse_args()
