@@ -3,7 +3,7 @@ from flask import json
 from .base_tests import BaseTests
 from app.api.v1.users.models import UsersModel
 
-class TestReports(BaseTests):
+class TestUsers(BaseTests):
     def test_sign_up_successful(self):
         response = self.test_client.post('/api/v1/auth/signup', json = self.new_user_same_passwords)
         data = json.loads(response.data)
