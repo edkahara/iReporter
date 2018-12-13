@@ -53,3 +53,28 @@ class TestUsers(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "This username is taken"})
+
+
+    def test_log_in_successful(self):
+        self.createAccountForTestingUsers()
+
+        response = self.test_client.post('/api/v2/auth/login', json = self.new_user_login_correct_details)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_log_in_unsuccessful_incorrect_password(self):
+        self.createAccountForTestingUsers()
+
+        response = self.test_client.post('/api/v2/auth/login', json = self.new_user_login_incorrect_password)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data, {"status": 401, "error": "The password you entered is incorrect."})
+
+
+    def test_log_in_unsuccessful_nonexistent_username(self):
+        self.createAccountForTestingUsers()
+
+        response = self.test_client.post('/api/v2/auth/login', json = self.new_user_login_nonexistent_username)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "The username you entered doesn't belong to an account."})

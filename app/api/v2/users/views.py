@@ -2,7 +2,8 @@ import re
 import datetime
 from flask import request, json
 from flask_restful import Resource, reqparse, inputs
-from werkzeug.security import generate_password_hash
+from flask_jwt_extended import create_access_token
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .models import UserModel
 
@@ -65,3 +66,43 @@ class UserSignup(Resource):
                 }, 201
             else:
                 return {"status": 401, "error": "Password and Password confirmation do not match."}, 401
+
+
+class UserLogin(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', required=True, location="json", type=str, help='Username cannot be blank.')
+        parser.add_argument('password', required=True, location="json", type=str, help='Password cannot be blank.')
+        data = parser.parse_args()
+        user = {
+            "username": data["username"],
+            "password": data["password"]
+        }
+        user_to_log_in = UserModel().get_specific_user('username', user["username"])
+        if user_to_log_in:
+            if check_password_hash(user_to_log_in[7], user["password"]):
+                access_token = create_access_token(user["username"], expires_delta=datetime.timedelta(minutes=60))
+                return {
+                    "status": 200,
+                    "data": [
+                        {
+                            "user": {
+                                "id": user_to_log_in[0],
+                                "isadmin": user_to_log_in[1],
+                                "firstname": user_to_log_in[2],
+                                "lastname": user_to_log_in[3],
+                                "email": user_to_log_in[4],
+                                "phoneNumber": user_to_log_in[5],
+                                "username": user_to_log_in[6],
+                                "password": user_to_log_in[7],
+                                "registered": json.dumps(user_to_log_in[8])
+                            },
+                            "access_token": access_token,
+                            "message": "User Logged In."
+                        }
+                    ]
+                }
+            else:
+                return {"status": 401, "error": "The password you entered is incorrect."}, 401
+        else:
+            return {"status": 404, "error": "The username you entered doesn't belong to an account."}, 404
