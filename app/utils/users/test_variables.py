@@ -7,6 +7,7 @@ new_user_same_passwords = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_different_passwords = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -16,6 +17,7 @@ new_user_different_passwords = {
     "password": "boraicho",
     "password_confirmation": "bo rai cho"
 }
+
 new_user_taken_email = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -25,6 +27,7 @@ new_user_taken_email = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_taken_phonenumber = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -34,6 +37,7 @@ new_user_taken_phonenumber = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_taken_username = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -43,6 +47,7 @@ new_user_taken_username = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_invalid_email = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -52,6 +57,7 @@ new_user_invalid_email = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_invalid_username = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -61,14 +67,17 @@ new_user_invalid_username = {
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }
+
 new_user_login_correct_details = {
     "username": "boraicho",
     "password": "boraicho"
 }
+
 new_user_login_incorrect_password = {
     "username": "boraicho",
     "password": "bo rai cho"
 }
+
 new_user_login_nonexistent_username = {
     "username": "xyz",
     "password": "boraicho"

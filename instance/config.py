@@ -3,6 +3,8 @@ import os
 class Config(object):
     DEBUG = False
     TESTING = False
+    JWT_BLACKLIST_ENABLED = True
+    JWT_BLACKLIST_TOKEN_CHECKS = ['access']
     SECRET_KEY = os.getenv('SECRET_KEY')
     DB_PASSWORD = os.getenv('DB_PASSWORD')
     DB_HOST = os.getenv('DB_HOST')

@@ -3,7 +3,7 @@ from flask import json, current_app
 
 from app import create_app
 from instance.database import DBModel
-from app.utils.test_variables import new_user_same_passwords, new_user_login_correct_details
+from app.utils.users.test_variables import new_user_same_passwords, new_user_login_correct_details
 
 class BaseTests(TestCase):
         def setUp(self):
