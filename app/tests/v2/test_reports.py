@@ -36,7 +36,7 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data, {
             "message": {
-                "location": "Location can only be strictly of the form 'number,number'. A number can have a negative '-' before the number and a decimal point."
+                "location": "Location can only be strictly of the form 'number within the range [-90,90],number within the range [-180,180]'."
             }
         })
 
@@ -191,7 +191,7 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data, {
             "message": {
-                "location": "Location can only be strictly of the form 'number,number'. A number can have a negative '-' before the number and a decimal point."
+                "location": "Location can only be strictly of the form 'number within the range [-90,90],number within the range [-180,180]'."
             }
         })
 
