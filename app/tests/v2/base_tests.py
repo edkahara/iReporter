@@ -3,7 +3,8 @@ from flask import json
 
 from app import create_app
 from instance.database import DBModel
-from app.utils.users.test_variables import new_user_same_passwords, new_user_login_correct_details
+from app.utils.users.test_variables import (new_user_same_passwords,
+new_user_login_correct_details, admin_login_details)
 from app.utils.reports.test_variables import report_in_draft, red_flag_report, intervention_report
 
 class BaseTests(TestCase):
@@ -14,6 +15,11 @@ class BaseTests(TestCase):
 
         def tearDown(self):
             DBModel().clear_database()
+
+        def adminLogInForTesting(self):
+            response = self.test_client.post('/api/v2/auth/login', json=admin_login_details)
+            data = json.loads(response.data)
+            return data["data"][0]["access_token"]
 
         def createAccountForTesting(self):
             self.test_client.post('/api/v2/auth/signup', json=new_user_same_passwords)

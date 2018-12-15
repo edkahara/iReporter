@@ -1,6 +1,7 @@
 import os
 import psycopg2
 from flask import current_app
+from werkzeug.security import generate_password_hash
 
 class DBModel:
     def __init__(self):
@@ -21,7 +22,7 @@ class DBModel:
                 firstname varchar(255),
                 lastname varchar(255),
                 email text NOT NULL UNIQUE,
-                phonenumber text,
+                phonenumber text NOT NULL UNIQUE,
                 username varchar(255) NOT NULL UNIQUE,
                 password text NOT NULL,
                 registered timestamp with time zone DEFAULT (now())
@@ -47,4 +48,27 @@ class DBModel:
         ]
         for query in queries:
             self.cursor.execute(query)
+            self.connect.commit()
+
+    def check_admin_existence(self):
+        self.cursor.execute("SELECT * FROM users WHERE username='liukang';")
+        return self.cursor.fetchone()
+
+    def create_admin(self):
+        admin = self.check_admin_existence()
+        if not admin:
+            new_admin = {
+                "isadmin": True,
+                "firstname": "Liu",
+                "lastname": "Kang",
+                "email": "liukang@gmail.com",
+                "phonenumber": "+2542345678901",
+                "username": "liukang",
+                "password": generate_password_hash("liukang")
+            }
+            self.cursor.execute("""
+                INSERT INTO users (isadmin, firstname, lastname, email, phonenumber, username, password)
+                VALUES(%s, %s, %s, %s, %s, %s, %s);""",
+                (new_admin['isadmin'], new_admin['firstname'], new_admin['lastname'], new_admin['email'],
+                new_admin['phonenumber'], new_admin['username'], new_admin['password']))
             self.connect.commit()
