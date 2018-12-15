@@ -17,13 +17,13 @@ class DBModel:
     def create_tables(self):
         queries = [
             """CREATE TABLE IF NOT EXISTS users (
-                id serial NOT NULL PRIMARY KEY UNIQUE,
+                id serial NOT NULL UNIQUE,
                 isadmin boolean NOT NULL,
-                firstname varchar(255),
-                lastname varchar(255),
+                firstname varchar(255) NOT NULL,
+                lastname varchar(255) NOT NULL,
                 email text NOT NULL UNIQUE,
                 phonenumber text NOT NULL UNIQUE,
-                username varchar(255) NOT NULL UNIQUE,
+                username varchar(255) NOT NULL PRIMARY KEY UNIQUE,
                 password text NOT NULL,
                 registered timestamp with time zone DEFAULT (now())
             )""",
@@ -34,7 +34,8 @@ class DBModel:
                 location text NOT NULL,
                 comment text NOT NULL,
                 status text NOT NULL,
-                created timestamp with time zone DEFAULT (now())
+                created timestamp with time zone DEFAULT (now()),
+                FOREIGN KEY(reporter) REFERENCES users(username)
             )"""
         ]
         for query in queries:
@@ -43,8 +44,8 @@ class DBModel:
 
     def clear_database(self):
         queries = [
-            "DROP TABLE IF EXISTS users",
-            "DROP TABLE IF EXISTS reports"
+            "DROP TABLE IF EXISTS users cascade;",
+            "DROP TABLE IF EXISTS reports cascade;"
         ]
         for query in queries:
             self.cursor.execute(query)

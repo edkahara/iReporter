@@ -67,6 +67,7 @@ Here are the API endpoints which you can test using either the heroku app link (
 |   GET       |    /api/v2/reports/&lt;int:id&gt;                          |   Fetch a specific report by its id     |
 |   PATCH     |    /api/v2/reports/&lt;int:id&gt;/location                 |   Edit a specific report's location     |
 |   PATCH     |    /api/v2/reports/&lt;int:id&gt;/comment                  |   Edit a specific report's comment      |
+|   PATCH     |    /api/v2/reports/&lt;int:id&gt;/status                   |   Edit a specific report's status       |
 |   DELETE    |    /api/v2/reports/&lt;int:id&gt;                          |   Delete a specific report              |
 
 ## API Documentation

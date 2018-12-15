@@ -37,3 +37,7 @@ class ReportModel(DBModel):
     def change_report_status(self, report_id, new_data):
         self.cursor.execute("UPDATE reports SET status='{}' WHERE id={};".format(new_data, report_id))
         self.connect.commit()
+
+    def delete(self, report_id):
+        self.cursor.execute("DELETE from reports WHERE id={};".format(report_id))
+        self.connect.commit()
