@@ -25,6 +25,15 @@ class DBModel:
                 username varchar(255) NOT NULL UNIQUE,
                 password text NOT NULL,
                 registered timestamp with time zone DEFAULT (now())
+            )""",
+            """CREATE TABLE IF NOT EXISTS reports (
+                id serial NOT NULL PRIMARY KEY UNIQUE,
+                reporter varchar(255) NOT NULL,
+                type text NOT NULL,
+                location text NOT NULL,
+                comment text NOT NULL,
+                status text NOT NULL,
+                created timestamp with time zone DEFAULT (now())
             )"""
         ]
         for query in queries:
@@ -33,7 +42,9 @@ class DBModel:
 
     def clear_database(self):
         queries = [
-            "DROP TABLE IF EXISTS users"        ]
+            "DROP TABLE IF EXISTS users",
+            "DROP TABLE IF EXISTS reports"
+        ]
         for query in queries:
             self.cursor.execute(query)
             self.connect.commit()

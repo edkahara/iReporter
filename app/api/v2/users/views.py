@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
-from app.utils.validators import validate_user_signup_input, validate_user_login_input
+from app.utils.users.validators import validate_user_signup_input, validate_user_login_input
 from .models import UserModel
 
 class UserSignup(Resource):
@@ -62,6 +62,7 @@ class UserSignup(Resource):
             else:
                 return {"status": 401, "error": "Password and Password confirmation do not match."}, 401
 
+
 class UserLogin(Resource):
     def post(self):
         data = request.get_json()
@@ -100,6 +101,7 @@ class UserLogin(Resource):
                 return {"status": 401, "error": "The password you entered is incorrect."}, 401
         else:
             return {"status": 404, "error": "The username you entered doesn't belong to an account."}, 404
+
 
 class UserLogout(Resource):
     @jwt_required

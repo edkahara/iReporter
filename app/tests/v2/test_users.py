@@ -1,7 +1,7 @@
 from flask import json
 
 from .base_tests import BaseTests
-from app.utils.test_variables import (new_user_same_passwords,
+from app.utils.users.test_variables import (new_user_same_passwords,
 new_user_invalid_email, new_user_invalid_username, new_user_different_passwords,
 new_user_taken_email, new_user_taken_phonenumber, new_user_taken_username,
 new_user_login_correct_details, new_user_login_incorrect_password,
@@ -34,11 +34,13 @@ class TestUsers(BaseTests):
             }
         )
 
+
     def test_sign_up_unsuccessful_different_passwords(self):
         response = self.test_client.post('/api/v2/auth/signup', json = new_user_different_passwords)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "Password and Password confirmation do not match."})
+
 
     def test_sign_up_unsuccessful_taken_email(self):
         self.createAccountForTesting()
@@ -47,6 +49,7 @@ class TestUsers(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "This email is taken."})
+
 
     def test_sign_up_unsuccessful_taken_username(self):
         self.createAccountForTesting()
@@ -64,11 +67,13 @@ class TestUsers(BaseTests):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "This phone number is taken."})
 
+
     def test_log_in_successful(self):
         self.createAccountForTesting()
 
         response = self.test_client.post('/api/v2/auth/login', json = new_user_login_correct_details)
         self.assertEqual(response.status_code, 200)
+
 
     def test_log_in_unsuccessful_incorrect_password(self):
         self.createAccountForTesting()
@@ -77,6 +82,7 @@ class TestUsers(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "The password you entered is incorrect."})
+
 
     def test_log_in_unsuccessful_nonexistent_username(self):
         self.createAccountForTesting()

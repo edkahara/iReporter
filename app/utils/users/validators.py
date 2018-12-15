@@ -22,7 +22,7 @@ def validate_user_signup_input(user_input):
                         "username": "Username can only be strictly between 5 and 25 characters long and can only contain lowercase letters, numbers and underscores."
                     }
                 }
-                
+
 def validate_user_login_input(user_input):
     for key in user_input:
         if (key == ('username' or 'password')) and (not re.match(r'^(?!\s*$).+', user_input[key])):
