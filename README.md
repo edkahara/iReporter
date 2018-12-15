@@ -42,26 +42,31 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
   `env.bat`
 
 ### Run the application
+
   `flask run`
 
 ### Test the application
+
   `nosetests`
 
 ## Endpoints to test
 
-Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter.herokuapp.com/) or your local server using POSTMAN:
+Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter-v2.herokuapp.com/) or your local server using POSTMAN:
 
 |    METHOD   |   ENDPOINT                              | DESCRIPTION                           |    
 |-------------|-----------------------------------------|---------------------------------------|
-|   POST      |    /api/v1/users/signup                 |   Sign a user up                      |
-|   POST      |    /api/v1/users/signup                 |   Log a user in                       |
-|   POST      |    /api/v1/reports/                     |   Create a new report                 |
-|   GET       |    /api/v1/reports/                     |   Fetch all existing reports          |
-|   GET       |    /api/v1/reports/&lt;id&gt;           |   Fetch a specific report by its id   |
-|   PATCH     |    /api/v1/reports/&lt;id&gt;/location  |   Edit a specific report's location   |
-|   PATCH     |    /api/v1/reports/&lt;id&gt;/comment   |   Edit a specific report's comment    |
-|   DELETE    |    /api/v1/reports/&lt;id&gt;           |   Delete a specific report            |
+|   POST      |    /api/v2/users/signup                 |   Sign a user up                      |
+|   POST      |    /api/v2/users/signup                 |   Log a user in                       |
+|   POST      |    /api/v2/reports/                     |   Create a new report                 |
+|   GET       |    /api/v2/reports/                     |   Fetch all existing reports          |
+|   GET       |    /api/v2/reports/&lt;id&gt;           |   Fetch a specific report by its id   |
+|   PATCH     |    /api/v2/reports/&lt;id&gt;/location  |   Edit a specific report's location   |
+|   PATCH     |    /api/v2/reports/&lt;id&gt;/comment   |   Edit a specific report's comment    |
+|   DELETE    |    /api/v2/reports/&lt;id&gt;           |   Delete a specific report            |
 
+## API Documentation
+
+You can view the API documentation on https://documenter.getpostman.com/view/5360822/RzfmDmFu
 
 # Author
 

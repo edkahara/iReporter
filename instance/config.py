@@ -17,9 +17,6 @@ class Testing(Config):
     DEBUG = True
     DB_NAME = os.getenv('TEST_DATABASE')
 
-class Staging(Config):
-    DEBUG = True
-
 class Production(Config):
     DEBUG = False
     DB_URL = os.getenv('APP_DATABASE')
@@ -27,6 +24,5 @@ class Production(Config):
 config = {
     'development': Development,
     'production': Production,
-    'staging': Staging,
     'testing': Testing
 }
