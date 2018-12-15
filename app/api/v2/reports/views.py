@@ -23,8 +23,8 @@ class Reports(Resource):
         reports = ReportModel().get_all_reports()
         results = []
         for report in reports:
-            obj = make_dictionary(report)
-            results.append(obj)
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
         return {"status": 200, "data": results}
 
     @jwt_required
@@ -62,8 +62,8 @@ class ReportsByType(Resource):
             reports = ReportModel().get_specific_reports('type','Intervention')
         results = []
         for report in reports:
-            obj = make_dictionary(report)
-            results.append(obj)
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
         return {"status": 200, "data": results}
 
 class UserReports(Resource):
@@ -72,8 +72,8 @@ class UserReports(Resource):
         reports = ReportModel().get_specific_reports('reporter',username)
         results = []
         for report in reports:
-            obj = make_dictionary(report)
-            results.append(obj)
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
         return {"status": 200, "data": results}
 
 class UserReportsByType(Resource):
@@ -85,8 +85,8 @@ class UserReportsByType(Resource):
             reports = ReportModel().get_all_user_reports_by_type(username, 'Intervention')
         results = []
         for report in reports:
-            obj = make_dictionary(report)
-            results.append(obj)
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
         return {"status": 200, "data": results}
 
 class Report(Resource):

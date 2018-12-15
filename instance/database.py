@@ -43,12 +43,9 @@ class DBModel:
             self.connect.commit()
 
     def clear_database(self):
-        queries = [
-            "DROP TABLE IF EXISTS users cascade;",
-            "DROP TABLE IF EXISTS reports cascade;"
-        ]
-        for query in queries:
-            self.cursor.execute(query)
+        tables = ["users", "reports"]
+        for table in tables:
+            self.cursor.execute("DROP TABLE IF EXISTS {} cascade;".format(table))
             self.connect.commit()
 
     def check_admin_existence(self):
