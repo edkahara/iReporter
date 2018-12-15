@@ -19,7 +19,7 @@ class ReportModel(DBModel):
         return self.cursor.fetchall()
 
     def get_specific_reports(self, key, value):
-        self.cursor.execute("SELECT * FROM reports WHERE {}='{}'".format(key, value))
+        self.get_specific_from_table('reports', key, value)
         return self.cursor.fetchall()
 
     def get_all_user_reports_by_type(self, reporter_username, report_type):

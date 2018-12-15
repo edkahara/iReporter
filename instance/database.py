@@ -56,6 +56,9 @@ class DBModel:
             new_user['phonenumber'], new_user['username'], new_user['password']))
         self.connect.commit()
 
+    def get_specific_from_table(self, table, table_key, table_value):
+        self.cursor.execute("SELECT * FROM {} WHERE {}='{}'".format(table, table_key, table_value))
+
     def check_admin_existence(self):
         self.cursor.execute("SELECT * FROM users WHERE username='liukang';")
         return self.cursor.fetchone()

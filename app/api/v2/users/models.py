@@ -6,5 +6,5 @@ class UserModel(DBModel):
         return self.cursor.fetchone()[0]
 
     def get_specific_user(self, key, value):
-        self.cursor.execute("SELECT * FROM users WHERE {}='{}';".format(key, value))
+        self.get_specific_from_table('users', key, value)
         return self.cursor.fetchone()
