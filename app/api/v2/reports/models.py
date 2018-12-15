@@ -13,3 +13,19 @@ class ReportModel(DBModel):
     def get_specific_report(self, report_id):
         self.cursor.execute("SELECT * FROM reports WHERE id={};".format(report_id))
         return self.cursor.fetchone()
+
+    def get_all_reports(self):
+        self.cursor.execute("SELECT * FROM reports")
+        return self.cursor.fetchall()
+
+    def get_all_reports_by_type(self, report_type):
+        self.cursor.execute("SELECT * FROM reports WHERE type='{}'".format(report_type))
+        return self.cursor.fetchall()
+
+    def get_all_user_reports(self, reporter_username):
+        self.cursor.execute("SELECT * FROM reports WHERE reporter='{}'".format(reporter_username))
+        return self.cursor.fetchall()
+
+    def get_all_user_reports_by_type(self, reporter_username, report_type):
+        self.cursor.execute("SELECT * FROM reports WHERE (reporter='{}') AND (type='{}')".format(reporter_username, report_type))
+        return self.cursor.fetchall()
