@@ -1,7 +1,7 @@
 from flask import json
 
 from .base_tests import BaseTests
-from app.utils.users.test_variables import (new_user_same_passwords, new_user_empty_firstname,
+from app.utils.test_variables import (new_user_same_passwords, new_user_empty_firstname,
 new_user_empty_lastname, new_user_empty_password, new_user_invalid_email,
 new_user_invalid_username, new_user_different_passwords, new_user_taken_email,
 new_user_taken_phonenumber, new_user_taken_username, new_user_login_correct_details,

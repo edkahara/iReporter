@@ -1,7 +1,7 @@
 from flask import json
 
 from .base_tests import BaseTests
-from app.utils.reports.test_variables import (report_in_draft,
+from app.utils.test_variables import (report_in_draft,
 report_with_invalid_type, report_with_invalid_location, report_with_invalid_comment,
 new_valid_status, new_invalid_status, new_valid_location, new_valid_comment,
 new_invalid_location, new_invalid_comment)
@@ -48,7 +48,7 @@ class TestReports(BaseTests):
         response = self.test_client.post('/api/v2/reports', json=report_with_invalid_comment, headers=dict(Authorization="Bearer " + access_token))
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data, {"message": {"comment": "Comment cannot be blank."}})
+        self.assertEqual(data, {"message": {"comment": "comment cannot be blank."}})
 
 
     def test_get_all_reports(self):
@@ -198,7 +198,7 @@ class TestReports(BaseTests):
         response = self.test_client.patch('/api/v2/reports/2/comment', json=new_invalid_comment, headers=dict(Authorization="Bearer " + access_token))
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data, {"message": {"comment": "Comment cannot be blank."}})
+        self.assertEqual(data, {"message": {"comment": "comment cannot be blank."}})
 
 
     def test_delete_specific_report(self):

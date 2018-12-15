@@ -2,10 +2,20 @@ from flask import request, json
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from app.utils.reports.validators import (validate_new_report_user_input,
-validate_admin_status_change, validate_edit_report_user_input)
+from app.utils.validators import validate_input
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
+
+def make_dictionary(report_tuple):
+    return {
+        'id': report_tuple[0],
+        'reporter': report_tuple[1],
+        'type': report_tuple[2],
+        'location': report_tuple[3],
+        'comment': report_tuple[4],
+        'status': report_tuple[5],
+        'created': json.dumps(report_tuple[6])
+    }
 
 class Reports(Resource):
     @jwt_required
@@ -13,15 +23,7 @@ class Reports(Resource):
         reports = ReportModel().get_all_reports()
         results = []
         for report in reports:
-            obj = {
-                'id': report[0],
-                'reporter': report[1],
-                'type': report[2],
-                'location': report[3],
-                'comment': report[4],
-                'status': report[5],
-                'created': json.dumps(report[6])
-            }
+            obj = make_dictionary(report)
             results.append(obj)
         return {"status": 200, "data": results}
 
@@ -36,7 +38,7 @@ class Reports(Resource):
             "comment": data["comment"],
             "status": "Draft"
         }
-        invalid = validate_new_report_user_input(report_to_save)
+        invalid = validate_input(report_to_save)
         if invalid:
             return invalid, 400
         saved_report_id = ReportModel().save(report_to_save)
@@ -45,15 +47,7 @@ class Reports(Resource):
             "status": 201,
             "data": [
                 {
-                    "report": {
-                        'id': new_report[0],
-                        'reporter': new_report[1],
-                        'type': new_report[2],
-                        'location': new_report[3],
-                        'comment': new_report[4],
-                        'status': new_report[5],
-                        'created': json.dumps(new_report[6])
-                    },
+                    "report": make_dictionary(new_report),
                     "message": "Created report."
                 }
             ]
@@ -68,15 +62,7 @@ class ReportsByType(Resource):
             reports = ReportModel().get_all_reports_by_type('Intervention')
         results = []
         for report in reports:
-            obj = {
-                'id': report[0],
-                'reporter': report[1],
-                'type': report[2],
-                'location': report[3],
-                'comment': report[4],
-                'status': report[5],
-                'created': json.dumps(report[6])
-            }
+            obj = make_dictionary(report)
             results.append(obj)
         return {"status": 200, "data": results}
 
@@ -86,15 +72,7 @@ class UserReports(Resource):
         reports = ReportModel().get_all_user_reports(username)
         results = []
         for report in reports:
-            obj = {
-                'id': report[0],
-                'reporter': report[1],
-                'type': report[2],
-                'location': report[3],
-                'comment': report[4],
-                'status': report[5],
-                'created': json.dumps(report[6])
-            }
+            obj = make_dictionary(report)
             results.append(obj)
         return {"status": 200, "data": results}
 
@@ -107,15 +85,7 @@ class UserReportsByType(Resource):
             reports = ReportModel().get_all_user_reports_by_type(username, 'Intervention')
         results = []
         for report in reports:
-            obj = {
-                'id': report[0],
-                'reporter': report[1],
-                'type': report[2],
-                'location': report[3],
-                'comment': report[4],
-                'status': report[5],
-                'created': json.dumps(report[6])
-            }
+            obj = make_dictionary(report)
             results.append(obj)
         return {"status": 200, "data": results}
 
@@ -126,15 +96,7 @@ class Report(Resource):
         if report:
             return {
                 "status": 200,
-                "data": [{
-                    'id': report[0],
-                    'reporter': report[1],
-                    'type': report[2],
-                    'location': report[3],
-                    'comment': report[4],
-                    'status': report[5],
-                    'created': json.dumps(report[6])
-                }]
+                "data": [make_dictionary(report)]
             }
         else:
             return ({"status": 404, "error": "Report not found."}, 404)
@@ -167,20 +129,12 @@ class EditReport(Resource):
                     new_data = {
                         key: data[key]
                     }
-                    invalid = validate_edit_report_user_input(new_data)
+                    invalid = validate_input(new_data)
                     if invalid:
                         return invalid, 400
                     ReportModel().edit_report(id, key, new_data[key])
                     report = ReportModel().get_specific_report(id)
-                    updated_report = {
-                        'id': report[0],
-                        'reporter': report[1],
-                        'type': report[2],
-                        'location': report[3],
-                        'comment': report[4],
-                        'status': report[5],
-                        'created': json.dumps(report[6])
-                    }
+                    updated_report = make_dictionary(report)
                     return {"status": 200, "data": [{"report": updated_report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
                 else:
                     return {"status": 405, "error": "Report cannot be edited because it has already been submitted."}, 405
@@ -201,20 +155,12 @@ class ChangeReportStatus(Resource):
                 new_status = {
                     "status": data["status"]
                 }
-                invalid = validate_admin_status_change(new_status)
+                invalid = validate_input(new_status)
                 if invalid:
                     return invalid, 400
                 ReportModel().change_report_status(id, new_status["status"])
                 report = ReportModel().get_specific_report(id)
-                updated_report = {
-                    'id': report[0],
-                    'reporter': report[1],
-                    'type': report[2],
-                    'location': report[3],
-                    'comment': report[4],
-                    'status': report[5],
-                    'created': json.dumps(report[6])
-                }
+                updated_report = make_dictionary(report)
                 return {"status": 200, "data": [{"report": updated_report, "message": "Updated report's status."}]}
             else:
                 return {"status": 401, "error": "You are not allowed to change a report's status."}, 401

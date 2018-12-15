@@ -3,9 +3,9 @@ from flask import json
 
 from app import create_app
 from instance.database import DBModel
-from app.utils.users.test_variables import (new_user_same_passwords,
+from app.utils.test_variables import (new_user_same_passwords,
 new_user_login_correct_details, admin_login_correct_details)
-from app.utils.reports.test_variables import report_in_draft, red_flag_report, intervention_report
+from app.utils.test_variables import report_in_draft, red_flag_report, intervention_report
 
 class BaseTests(TestCase):
         def setUp(self):

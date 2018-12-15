@@ -5,8 +5,21 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
-from app.utils.users.validators import validate_user_signup_input
+from app.utils.validators import validate_input
 from .models import UserModel
+
+def make_dictionary(user_tuple):
+    return {
+        "id": user_tuple[0],
+        "isadmin": user_tuple[1],
+        "firstname": user_tuple[2],
+        "lastname": user_tuple[3],
+        "email": user_tuple[4],
+        "phonenumber": user_tuple[5],
+        "username": user_tuple[6],
+        "password": user_tuple[7],
+        "registered": json.dumps(user_tuple[8])
+    }
 
 class UserSignup(Resource):
     def post(self):
@@ -21,7 +34,7 @@ class UserSignup(Resource):
             "password": data["password"],
             "password_confirmation": data["password_confirmation"]
         }
-        invalid = validate_user_signup_input(user_to_sign_up)
+        invalid = validate_input(user_to_sign_up)
         if invalid:
             return invalid, 400
         existing_user_by_username = UserModel().get_specific_user('username', user_to_sign_up['username'])
@@ -44,17 +57,7 @@ class UserSignup(Resource):
                     "status": 201,
                     "data": [
                         {
-                            "user": {
-                                "id": new_user[0],
-                                "isadmin": new_user[1],
-                                "firstname": new_user[2],
-                                "lastname": new_user[3],
-                                "email": new_user[4],
-                                "phonenumber": new_user[5],
-                                "username": new_user[6],
-                                "password": new_user[7],
-                                "registered": json.dumps(new_user[8])
-                            },
+                            "user": make_dictionary(new_user),
                             "message": "User Created."
                         }
                     ]
@@ -77,17 +80,7 @@ class UserLogin(Resource):
                     "status": 200,
                     "data": [
                         {
-                            "user": {
-                                "id": user_to_log_in[0],
-                                "isadmin": user_to_log_in[1],
-                                "firstname": user_to_log_in[2],
-                                "lastname": user_to_log_in[3],
-                                "email": user_to_log_in[4],
-                                "phonenumber": user_to_log_in[5],
-                                "username": user_to_log_in[6],
-                                "password": user_to_log_in[7],
-                                "registered": json.dumps(user_to_log_in[8])
-                            },
+                            "user": make_dictionary(user_to_log_in),
                             "access_token": access_token,
                             "message": "User Logged In."
                         }
