@@ -63,6 +63,18 @@ class BaseTests(TestCase):
     	        "password": "boraicho",
     	        "password_confirmation": "boraicho"
             }
+            self.new_user_login_correct_details = {
+                "username": "boraicho",
+                "password": "boraicho"
+            }
+            self.new_user_login_incorrect_password = {
+                "username": "boraicho",
+                "password": "bo rai cho"
+            }
+            self.new_user_login_nonexistent_username = {
+                "username": "",
+                "password": "boraicho"
+            }
             DBModel().create_tables()
 
         def tearDown(self):
