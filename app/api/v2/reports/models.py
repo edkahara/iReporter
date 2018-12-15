@@ -30,6 +30,10 @@ class ReportModel(DBModel):
         self.cursor.execute("SELECT * FROM reports WHERE (reporter='{}') AND (type='{}')".format(reporter_username, report_type))
         return self.cursor.fetchall()
 
+    def edit_report(self, report_id, key, new_data):
+        self.cursor.execute("UPDATE reports SET {}='{}' WHERE id={};".format(key, new_data, report_id))
+        self.connect.commit()
+
     def change_report_status(self, report_id, new_data):
         self.cursor.execute("UPDATE reports SET status='{}' WHERE id={};".format(new_data, report_id))
         self.connect.commit()
