@@ -48,6 +48,14 @@ class DBModel:
             self.cursor.execute("DROP TABLE IF EXISTS {} cascade;".format(table))
             self.connect.commit()
 
+    def create_user(self, new_user):
+        self.cursor.execute("""
+            INSERT INTO users (isadmin, firstname, lastname, email, phonenumber, username, password)
+            VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING username;""",
+            (new_user['isadmin'], new_user['firstname'], new_user['lastname'], new_user['email'],
+            new_user['phonenumber'], new_user['username'], new_user['password']))
+        self.connect.commit()
+
     def check_admin_existence(self):
         self.cursor.execute("SELECT * FROM users WHERE username='liukang';")
         return self.cursor.fetchone()
@@ -64,9 +72,4 @@ class DBModel:
                 "username": "liukang",
                 "password": generate_password_hash("liukang")
             }
-            self.cursor.execute("""
-                INSERT INTO users (isadmin, firstname, lastname, email, phonenumber, username, password)
-                VALUES(%s, %s, %s, %s, %s, %s, %s);""",
-                (new_admin['isadmin'], new_admin['firstname'], new_admin['lastname'], new_admin['email'],
-                new_admin['phonenumber'], new_admin['username'], new_admin['password']))
-            self.connect.commit()
+            self.create_user(new_admin)
