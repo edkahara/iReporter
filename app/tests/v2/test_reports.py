@@ -106,3 +106,27 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["data"][0]["id"], 2)
         self.assertEqual(data["data"][0]["type"], 'Intervention')
+
+    def test_get_specific_report(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+        self.createRedFlagAndInterventionReportsForTesting()
+
+        response = self.test_client.get('/api/v2/reports/1', headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["data"][0]["id"], 1)
+
+        response = self.test_client.get('/api/v2/reports/2', headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["data"][0]["id"], 2)
+
+    def test_report_not_found(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+        self.createRedFlagAndInterventionReportsForTesting()
+
+        response = self.test_client.get('/api/v2/reports/0', headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(response.status_code, 404)
+        self.assertNotEqual(response.data, {"status": 404, "error": "Report not found."})
