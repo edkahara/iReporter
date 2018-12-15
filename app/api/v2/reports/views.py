@@ -1,4 +1,3 @@
-import datetime
 from flask import request, json
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -27,7 +26,6 @@ class Reports(Resource):
     @jwt_required
     def post(self):
         current_user = get_jwt_identity()
-
         data = request.get_json()
         report_to_save = {
             "reporter": current_user,
@@ -118,3 +116,23 @@ class UserReportsByType(Resource):
             }
             results.append(obj)
         return {"status": 200, "data": results}
+
+class Report(Resource):
+    @jwt_required
+    def get(self, id):
+        report = ReportModel().get_specific_report(id)
+        if report:
+            return {
+                "status": 200,
+                "data": [{
+                    'id': report[0],
+                    'reporter': report[1],
+                    'type': report[2],
+                    'location': report[3],
+                    'comment': report[4],
+                    'status': report[5],
+                    'created': json.dumps(report[6])
+                }]
+            }
+        else:
+            return ({"status": 404, "error": "Report not found."}, 404)
