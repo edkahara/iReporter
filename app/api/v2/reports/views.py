@@ -2,7 +2,8 @@ from flask import request, json
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from app.utils.reports.validators import validate_new_report_user_input, validate_admin_status_change
+from app.utils.reports.validators import (validate_new_report_user_input,
+validate_admin_status_change, validate_edit_report_user_input)
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
 
@@ -137,6 +138,40 @@ class Report(Resource):
             }
         else:
             return ({"status": 404, "error": "Report not found."}, 404)
+
+class EditReport(Resource):
+    @jwt_required
+    def patch(self, id, key):
+        current_user = get_jwt_identity()
+        report = ReportModel().get_specific_report(id)
+        if report:
+            if report[1] == current_user:
+                if report[5] == "Draft":
+                    data = request.get_json()
+                    new_data = {
+                        key: data[key]
+                    }
+                    invalid = validate_edit_report_user_input(new_data)
+                    if invalid:
+                        return invalid, 400
+                    ReportModel().edit_report(id, key, new_data[key])
+                    report = ReportModel().get_specific_report(id)
+                    updated_report = {
+                        'id': report[0],
+                        'reporter': report[1],
+                        'type': report[2],
+                        'location': report[3],
+                        'comment': report[4],
+                        'status': report[5],
+                        'created': json.dumps(report[6])
+                    }
+                    return {"status": 200, "data": [{"report": updated_report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
+                else:
+                    return {"status": 405, "error": "Report cannot be edited because it has already been submitted."}, 405
+            else:
+                return {"status": 401, "error": "You are not allowed to edit this report."}, 401
+        else:
+            return {"status": 404, "error": "Report not found."}, 404
 
 class ChangeReportStatus(Resource):
     @jwt_required
