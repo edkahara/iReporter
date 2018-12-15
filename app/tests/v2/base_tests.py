@@ -1,9 +1,10 @@
 from unittest import TestCase
-from flask import json, current_app
+from flask import json
 
 from app import create_app
 from instance.database import DBModel
 from app.utils.users.test_variables import new_user_same_passwords, new_user_login_correct_details
+from app.utils.reports.test_variables import report_in_draft, red_flag_report, intervention_report
 
 class BaseTests(TestCase):
         def setUp(self):
@@ -15,10 +16,16 @@ class BaseTests(TestCase):
             DBModel().clear_database()
 
         def createAccountForTesting(self):
-            response = self.test_client.post('/api/v2/auth/signup', json = new_user_same_passwords)
-            self.assertEqual(response.status_code, 201)
+            self.test_client.post('/api/v2/auth/signup', json=new_user_same_passwords)
 
         def logInForTesting(self):
-            response = self.test_client.post('/api/v2/auth/login', json = new_user_login_correct_details)
+            response = self.test_client.post('/api/v2/auth/login', json=new_user_login_correct_details)
             data = json.loads(response.data)
             return data["data"][0]["access_token"]
+
+        def createRedFlagAndInterventionReportsForTesting(self):
+            self.createAccountForTesting()
+            access_token = self.logInForTesting()
+
+            self.test_client.post('/api/v2/reports', json=red_flag_report, headers=dict(Authorization="Bearer " + access_token))
+            self.test_client.post('/api/v2/reports', json=intervention_report, headers=dict(Authorization="Bearer " + access_token))

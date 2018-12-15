@@ -53,16 +53,21 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter-v2.herokuapp.com/) or your local server using POSTMAN:
 
-|    METHOD   |   ENDPOINT                              | DESCRIPTION                           |    
-|-------------|-----------------------------------------|---------------------------------------|
-|   POST      |    /api/v2/users/signup                 |   Sign a user up                      |
-|   POST      |    /api/v2/users/signup                 |   Log a user in                       |
-|   POST      |    /api/v2/reports/                     |   Create a new report                 |
-|   GET       |    /api/v2/reports/                     |   Fetch all existing reports          |
-|   GET       |    /api/v2/reports/&lt;id&gt;           |   Fetch a specific report by its id   |
-|   PATCH     |    /api/v2/reports/&lt;id&gt;/location  |   Edit a specific report's location   |
-|   PATCH     |    /api/v2/reports/&lt;id&gt;/comment   |   Edit a specific report's comment    |
-|   DELETE    |    /api/v2/reports/&lt;id&gt;           |   Delete a specific report            |
+|    METHOD   |   ENDPOINT                                                 | DESCRIPTION                             |    
+|-------------|------------------------------------------------------------|-----------------------------------------|
+|   POST      |    /api/v2/users/signup                                    |   Sign a user up                        |
+|   POST      |    /api/v2/users/signup                                    |   Log a user in                         |
+|   POST      |    /api/v2/reports/                                        |   Create a new report                   |
+|   GET       |    /api/v2/reports/                                        |   Fetch all reports                     |
+|   GET       |    /api/v2/reports/red-flags                               |   Fetch all red-flag reports            |
+|   GET       |    /api/v2/reports/interventions                           |   Fetch all intervention reports        |
+|   GET       |    /api/v2/users/&lt;username&gt;/reports                  |   Fetch a user's reports                |
+|   GET       |    /api/v2/users/&lt;username&gt;/reports/red-flags        |   Fetch a user's red-flag reports       |
+|   GET       |    /api/v2/users/&lt;username&gt;/reports/interventions    |   Fetch a user's intervention reports   |
+|   GET       |    /api/v2/reports/&lt;int:id&gt;                          |   Fetch a specific report by its id     |
+|   PATCH     |    /api/v2/reports/&lt;int:id&gt;/location                 |   Edit a specific report's location     |
+|   PATCH     |    /api/v2/reports/&lt;int:id&gt;/comment                  |   Edit a specific report's comment      |
+|   DELETE    |    /api/v2/reports/&lt;int:id&gt;                          |   Delete a specific report              |
 
 ## API Documentation
 

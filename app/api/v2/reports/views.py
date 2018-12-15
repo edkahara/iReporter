@@ -8,6 +8,23 @@ from .models import ReportModel
 
 class Reports(Resource):
     @jwt_required
+    def get(self):
+        reports = ReportModel().get_all_reports()
+        results = []
+        for report in reports:
+            obj = {
+                'id': report[0],
+                'reporter': report[1],
+                'type': report[2],
+                'location': report[3],
+                'comment': report[4],
+                'status': report[5],
+                'created': json.dumps(report[6])
+            }
+            results.append(obj)
+        return {"status": 200, "data": results}
+
+    @jwt_required
     def post(self):
         current_user = get_jwt_identity()
 
@@ -41,3 +58,63 @@ class Reports(Resource):
                 }
             ]
         }, 201
+
+class ReportsByType(Resource):
+    @jwt_required
+    def get(self, type):
+        if type == 'red-flags':
+            reports = ReportModel().get_all_reports_by_type('Red-Flag')
+        elif type == 'interventions':
+            reports = ReportModel().get_all_reports_by_type('Intervention')
+        results = []
+        for report in reports:
+            obj = {
+                'id': report[0],
+                'reporter': report[1],
+                'type': report[2],
+                'location': report[3],
+                'comment': report[4],
+                'status': report[5],
+                'created': json.dumps(report[6])
+            }
+            results.append(obj)
+        return {"status": 200, "data": results}
+
+class UserReports(Resource):
+    @jwt_required
+    def get(self, username):
+        reports = ReportModel().get_all_user_reports(username)
+        results = []
+        for report in reports:
+            obj = {
+                'id': report[0],
+                'reporter': report[1],
+                'type': report[2],
+                'location': report[3],
+                'comment': report[4],
+                'status': report[5],
+                'created': json.dumps(report[6])
+            }
+            results.append(obj)
+        return {"status": 200, "data": results}
+
+class UserReportsByType(Resource):
+    @jwt_required
+    def get(self, username, type):
+        if type == 'red-flags':
+            reports = ReportModel().get_all_user_reports_by_type(username, 'Red-Flag')
+        elif type == 'interventions':
+            reports = ReportModel().get_all_user_reports_by_type(username, 'Intervention')
+        results = []
+        for report in reports:
+            obj = {
+                'id': report[0],
+                'reporter': report[1],
+                'type': report[2],
+                'location': report[3],
+                'comment': report[4],
+                'status': report[5],
+                'created': json.dumps(report[6])
+            }
+            results.append(obj)
+        return {"status": 200, "data": results}
