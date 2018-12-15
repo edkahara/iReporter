@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
-from app.utils.users.validators import validate_user_signup_input, validate_user_login_input
+from app.utils.users.validators import validate_user_signup_input
 from .models import UserModel
 
 class UserSignup(Resource):
@@ -69,9 +69,6 @@ class UserLogin(Resource):
             "username": data["username"],
             "password": data["password"]
         }
-        invalid = validate_user_login_input(user)
-        if invalid:
-            return invalid, 400
         user_to_log_in = UserModel().get_specific_user('username', user["username"])
         if user_to_log_in:
             if check_password_hash(user_to_log_in[7], user["password"]):

@@ -1,11 +1,12 @@
 from flask import json
 
 from .base_tests import BaseTests
-from app.utils.users.test_variables import (new_user_same_passwords,
-new_user_invalid_email, new_user_invalid_username, new_user_different_passwords,
-new_user_taken_email, new_user_taken_phonenumber, new_user_taken_username,
-new_user_login_correct_details, admin_login_correct_details, new_user_login_incorrect_password,
-new_user_login_nonexistent_username, admin_login_nonexistent_username, admin_login_incorrect_password)
+from app.utils.users.test_variables import (new_user_same_passwords, new_user_empty_firstname,
+new_user_empty_lastname, new_user_empty_password, new_user_invalid_email,
+new_user_invalid_username, new_user_different_passwords, new_user_taken_email,
+new_user_taken_phonenumber, new_user_taken_username, new_user_login_correct_details,
+admin_login_correct_details, new_user_login_incorrect_password, new_user_login_nonexistent_username,
+admin_login_nonexistent_username, admin_login_incorrect_password)
 
 class TestUsers(BaseTests):
     def test_sign_up_successful(self):
@@ -14,6 +15,24 @@ class TestUsers(BaseTests):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data["data"][0]["user"]["id"], 2)
 
+
+    def test_sign_up_unsuccessful_empty_data(self):
+        response = self.test_client.post('/api/v2/auth/signup', json=new_user_empty_firstname)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data, {"message": {"firstname": "firstname cannot be blank."}})
+
+        response = self.test_client.post('/api/v2/auth/signup', json=new_user_empty_lastname)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data, {"message": {"lastname": "lastname cannot be blank."}})
+
+        response = self.test_client.post('/api/v2/auth/signup', json=new_user_empty_password)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data, {"message": {"password": "password cannot be blank."}})
+
+
     def test_sign_up_unsuccessful_invalid_email(self):
         response = self.test_client.post('/api/v2/auth/signup', json=new_user_invalid_email)
         data = json.loads(response.data)
@@ -21,9 +40,9 @@ class TestUsers(BaseTests):
         self.assertEqual(data, {
             "message": {
                 "email": "Email can only be strictly of the following format: (letters or numbers or both with only one optional dot in-between)@(only letters).com."
-                }
             }
-        )
+        })
+
 
     def test_sign_up_unsuccessful_invalid_username(self):
         response = self.test_client.post('/api/v2/auth/signup', json=new_user_invalid_username)
@@ -32,9 +51,8 @@ class TestUsers(BaseTests):
         self.assertEqual(data, {
             "message": {
                 "username": "Username can only be strictly between 5 and 25 characters long and can only contain lowercase letters, numbers and underscores."
-                }
             }
-        )
+        })
 
 
     def test_sign_up_unsuccessful_different_passwords(self):
@@ -60,6 +78,7 @@ class TestUsers(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data, {"status": 401, "error": "This username is taken."})
+
 
     def test_sign_up_unsuccessful_taken_phonenumber(self):
         self.createAccountForTesting()
@@ -106,6 +125,7 @@ class TestUsers(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data, {"status": 404, "error": "The username you entered doesn't belong to an account."})
+
 
     def test_log_out(self):
         self.createAccountForTesting()

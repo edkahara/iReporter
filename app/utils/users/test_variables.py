@@ -8,6 +8,36 @@ new_user_same_passwords = {
     "password_confirmation": "boraicho"
 }
 
+new_user_empty_firstname = {
+    "firstname": "",
+    "lastname": "Rai Cho",
+    "email": "boraicho@gmail.com",
+    "phonenumber": "+2540123456789",
+    "username": "boraicho",
+    "password": "boraicho",
+    "password_confirmation": "boraicho"
+}
+
+new_user_empty_lastname = {
+    "firstname": "Bo",
+    "lastname": "",
+    "email": "boraicho@gmail.com",
+    "phonenumber": "+2540123456789",
+    "username": "boraicho",
+    "password": "boraicho",
+    "password_confirmation": "boraicho"
+}
+
+new_user_empty_password = {
+    "firstname": "Bo",
+    "lastname": "Rai Cho",
+    "email": "boraicho@gmail.com",
+    "phonenumber": "+2540123456789",
+    "username": "boraicho",
+    "password": "",
+    "password_confirmation": "boraicho"
+}
+
 new_user_different_passwords = {
     "firstname": "Bo",
     "lastname": "Rai Cho",

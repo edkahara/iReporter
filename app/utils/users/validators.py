@@ -2,7 +2,7 @@ import re
 
 def validate_user_signup_input(user_input):
     for key in user_input:
-        if (key == ('firstname' or 'lastname' or 'password' or 'password_confirmation')) and (not re.match(r'^(?!\s*$).+', user_input[key])):
+        if ((key == 'firstname') or (key == 'lastname') or (key == 'password')) and (not re.match(r'^(?!\s*$).+', user_input[key])):
             return {"message": {key: "{} cannot be blank.".format(key)}}
         elif (key == 'email') and (not re.match(r'^[a-z0-9](\.?[a-z0-9]){0,}@([a-z]){1,}\.com$', user_input["email"])):
             return {
@@ -22,8 +22,3 @@ def validate_user_signup_input(user_input):
                     "username": "Username can only be strictly between 5 and 25 characters long and can only contain lowercase letters, numbers and underscores."
                 }
             }
-
-def validate_user_login_input(user_input):
-    for key in user_input:
-        if (key == ('username' or 'password')) and (not re.match(r'^(?!\s*$).+', user_input[key])):
-            return {"message": {key: "{} cannot be blank.".format(key)}}
