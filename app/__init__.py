@@ -13,6 +13,7 @@ def create_app(config_name):
     app.register_blueprint(v2)
     with app.app_context():
         DBModel().create_tables()
+        DBModel().create_admin()
 
     jwt = JWTManager(app)
     @jwt.token_in_blacklist_loader

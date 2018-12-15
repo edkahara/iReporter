@@ -2,7 +2,7 @@ from flask import json
 
 from .base_tests import BaseTests
 from app.utils.reports.test_variables import (report_in_draft, report_with_invalid_type,
-report_with_invalid_status, report_with_invalid_location)
+report_with_invalid_location, new_valid_status, new_invalid_status)
 
 class TestReports(BaseTests):
     def test_report_creation(self):
@@ -22,20 +22,6 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data, {"message": {"type": "Type can only be strictly either 'Red-Flag' or 'Intervention'."}})
-
-    def test_invalid_report_status(self):
-        self.createAccountForTesting()
-        access_token = self.logInForTesting()
-
-        response = self.test_client.post('/api/v2/reports', json=report_with_invalid_status, headers=dict(Authorization="Bearer " + access_token))
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data, {
-            "message": {
-                "status": "Status can only be strictly either 'Draft' or 'Under Investigation' or 'Resolved' or 'Rejected'."
-                }
-            }
-        )
 
     def test_invalid_report_location(self):
         self.createAccountForTesting()
@@ -124,9 +110,49 @@ class TestReports(BaseTests):
 
     def test_report_not_found(self):
         self.createAccountForTesting()
+        user_access_token = self.logInForTesting()
+        self.createRedFlagAndInterventionReportsForTesting()
+        admin_access_token = self.adminLogInForTesting()
+
+        response = self.test_client.get('/api/v2/reports/0', headers=dict(Authorization="Bearer " + user_access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "Report not found."})
+
+        response = self.test_client.patch('/api/v2/reports/0/status', json=new_valid_status, headers=dict(Authorization="Bearer " + admin_access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "Report not found."})
+
+    def test_valid_admin_status_change(self):
+        self.createRedFlagAndInterventionReportsForTesting()
+        access_token = self.adminLogInForTesting()
+
+        response = self.test_client.patch('/api/v2/reports/1/status', json=new_valid_status, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["data"][0]["report"]["id"], 1)
+        self.assertEqual(data["data"][0]["report"]["status"], "Under Investigation")
+
+    def test_invalid_admin_status_change(self):
+        self.createRedFlagAndInterventionReportsForTesting()
+        access_token = self.adminLogInForTesting()
+
+        response = self.test_client.patch('/api/v2/reports/1/status', json=new_invalid_status, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data, {
+            "message": {
+                "status": "Status can only be strictly either 'Draft' or 'Under Investigation' or 'Resolved' or 'Rejected'."
+            }
+        })
+
+    def test_unathorized_status_change(self):
+        self.createAccountForTesting()
         access_token = self.logInForTesting()
         self.createRedFlagAndInterventionReportsForTesting()
 
-        response = self.test_client.get('/api/v2/reports/0', headers=dict(Authorization="Bearer " + access_token))
-        self.assertEqual(response.status_code, 404)
-        self.assertNotEqual(response.data, {"status": 404, "error": "Report not found."})
+        response = self.test_client.patch('/api/v2/reports/1/status', json=new_valid_status, headers=dict(Authorization="Bearer " + access_token))
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data, {"status": 401, "error": "You are not allowed to change a report's status."})

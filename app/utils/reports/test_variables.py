@@ -26,16 +26,17 @@ report_with_invalid_type = {
     "status": "Resolved"
 }
 
-report_with_invalid_status = {
-    "type": "Red-Flag",
-    "location": "1,1",
-    "comment": "Undetermined",
-    "status": "Wrong"
-}
-
 report_with_invalid_location = {
     "type": "Intervention",
     "location": "1,",
     "comment": "Undetermined",
     "status": "Draft"
+}
+
+new_valid_status = {
+    "status": "Under Investigation"
+}
+
+new_invalid_status = {
+    "status": "Pending"
 }

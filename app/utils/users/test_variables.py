@@ -82,3 +82,8 @@ new_user_login_nonexistent_username = {
     "username": "xyz",
     "password": "boraicho"
 }
+
+admin_login_details = {
+    "username": "liukang",
+    "password": "liukang"
+}
