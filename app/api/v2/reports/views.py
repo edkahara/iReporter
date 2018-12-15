@@ -57,9 +57,9 @@ class ReportsByType(Resource):
     @jwt_required
     def get(self, type):
         if type == 'red-flags':
-            reports = ReportModel().get_all_reports_by_type('Red-Flag')
+            reports = ReportModel().get_specific_reports('type','Red-Flag')
         elif type == 'interventions':
-            reports = ReportModel().get_all_reports_by_type('Intervention')
+            reports = ReportModel().get_specific_reports('type','Intervention')
         results = []
         for report in reports:
             obj = make_dictionary(report)
@@ -69,7 +69,7 @@ class ReportsByType(Resource):
 class UserReports(Resource):
     @jwt_required
     def get(self, username):
-        reports = ReportModel().get_all_user_reports(username)
+        reports = ReportModel().get_specific_reports('reporter',username)
         results = []
         for report in reports:
             obj = make_dictionary(report)

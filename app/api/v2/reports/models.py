@@ -18,12 +18,8 @@ class ReportModel(DBModel):
         self.cursor.execute("SELECT * FROM reports")
         return self.cursor.fetchall()
 
-    def get_all_reports_by_type(self, report_type):
-        self.cursor.execute("SELECT * FROM reports WHERE type='{}'".format(report_type))
-        return self.cursor.fetchall()
-
-    def get_all_user_reports(self, reporter_username):
-        self.cursor.execute("SELECT * FROM reports WHERE reporter='{}'".format(reporter_username))
+    def get_specific_reports(self, key, value):
+        self.cursor.execute("SELECT * FROM reports WHERE {}='{}'".format(key, value))
         return self.cursor.fetchall()
 
     def get_all_user_reports_by_type(self, reporter_username, report_type):
