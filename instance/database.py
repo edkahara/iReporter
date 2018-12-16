@@ -3,10 +3,16 @@ import psycopg2
 from flask import current_app
 from werkzeug.security import generate_password_hash
 
+
 class DBModel:
     def __init__(self):
         with current_app.app_context():
-            self.connect = psycopg2.connect(current_app.config['DB_NAME'])
+            self.connect = psycopg2.connect(
+                database=current_app.config['DB_NAME'],
+                host=current_app.config['DB_HOST'],
+                user=current_app.config['DB_USER'],
+                password=current_app.config['DB_PASSWORD']
+            )
         self.cursor = self.connect.cursor()
 
     def create_tables(self):
@@ -40,19 +46,33 @@ class DBModel:
     def clear_database(self):
         tables = ["users", "reports"]
         for table in tables:
-            self.cursor.execute("DROP TABLE IF EXISTS {} cascade;".format(table))
+            self.cursor.execute(
+                "DROP TABLE IF EXISTS {} cascade;".format(
+                    table
+                )
+            )
             self.connect.commit()
 
     def create_user(self, new_user):
         self.cursor.execute("""
-            INSERT INTO users (isadmin, firstname, lastname, email, phonenumber, username, password)
-            VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING username;""",
-            (new_user['isadmin'], new_user['firstname'], new_user['lastname'], new_user['email'],
-            new_user['phonenumber'], new_user['username'], new_user['password']))
+            INSERT INTO users (
+                isadmin, firstname, lastname, email,
+                phonenumber, username, password
+            ) VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING username;""", (
+                new_user['isadmin'], new_user['firstname'],
+                new_user['lastname'], new_user['email'],
+                new_user['phonenumber'], new_user['username'],
+                new_user['password']
+            )
+        )
         self.connect.commit()
 
     def get_specific_from_table(self, table, table_key, table_value):
-        self.cursor.execute("SELECT * FROM {} WHERE {}='{}'".format(table, table_key, table_value))
+        self.cursor.execute(
+            "SELECT * FROM {} WHERE {}='{}'".format(
+                table, table_key, table_value
+            )
+        )
 
     def check_admin_existence(self):
         self.cursor.execute("SELECT * FROM users WHERE username='liukang';")
