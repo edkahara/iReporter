@@ -7,10 +7,7 @@ class Config(object):
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ['access']
     SECRET_KEY = os.getenv('SECRET_KEY')
-    DB_PASSWORD = os.getenv('DB_PASSWORD')
-    DB_HOST = os.getenv('DB_HOST')
-    DB_USER = os.getenv('DB_USER')
-    DB_NAME = os.getenv('APP_DATABASE')
+    DB_URL = os.getenv('DATABASE_URL')
 
 
 class Development(Config):
@@ -20,7 +17,7 @@ class Development(Config):
 class Testing(Config):
     TESTING = True
     DEBUG = True
-    DB_NAME = os.getenv('TEST_DATABASE')
+    DB_URL = os.getenv('HEROKU_POSTGRESQL_GRAY_URL')
 
 
 class Production(Config):
