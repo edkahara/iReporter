@@ -21,25 +21,25 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 ## Installation and deployment.
 
+### Create two postgresql databases
+
+  Create two postgresql databases, one for the app and one for testing, which you will use during this deployment.
+
 ### Clone this repository
 
   `git clone https://github.com/edkahara/iReporter.git`
 
 ### Set up a virtual environment and activate it
 
-  `py -3 -m venv env`
+  `python3 - m venv env`
 
-### Activate the virtual environment
+## Create a .env file in the root directory and fill it with details using .env.example as a template. Then type:
 
-  `env\Scripts\activate`
+  `source .env`
 
 ### Install dependencies needed
 
   `pip install -r requirements.txt`
-
-## Create an env.bat file in the root directory and fill it with details using env.example as a template. Then type:
-
-  `env.bat`
 
 ### Run the application
 
@@ -47,7 +47,7 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 ### Test the application
 
-  `nosetests`
+  `nosetests --with-coverage --cover-package=app`
 
 ## Endpoints to test
 
@@ -72,7 +72,7 @@ Here are the API endpoints which you can test using either the heroku app link (
 
 ## API Documentation
 
-You can view the API documentation on https://documenter.getpostman.com/view/5360822/RzfmDmFu
+You can view the API documentation on https://ireporterv2.docs.apiary.io/
 
 # Author
 
