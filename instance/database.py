@@ -6,12 +6,7 @@ from werkzeug.security import generate_password_hash
 class DBModel:
     def __init__(self):
         with current_app.app_context():
-            self.connect = psycopg2.connect(
-                database=current_app.config['DB_NAME'],
-                host=current_app.config['DB_HOST'],
-                user=current_app.config['DB_USER'],
-                password=current_app.config['DB_PASSWORD']
-            )
+            self.connect = psycopg2.connect(current_app.config['DB_NAME'])
         self.cursor = self.connect.cursor()
 
     def create_tables(self):
