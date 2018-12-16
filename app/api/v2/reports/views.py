@@ -6,6 +6,7 @@ from app.utils.validators import validate_input
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
 
+
 def make_dictionary(report_tuple):
     return {
         'id': report_tuple[0],
@@ -16,6 +17,7 @@ def make_dictionary(report_tuple):
         'status': report_tuple[5],
         'created': json.dumps(report_tuple[6])
     }
+
 
 class Reports(Resource):
     @jwt_required
@@ -53,41 +55,51 @@ class Reports(Resource):
             ]
         }, 201
 
+
 class ReportsByType(Resource):
     @jwt_required
     def get(self, type):
         if type == 'red-flags':
-            reports = ReportModel().get_specific_reports('type','Red-Flag')
+            reports = ReportModel().get_specific_reports('type', 'Red-Flag')
         elif type == 'interventions':
-            reports = ReportModel().get_specific_reports('type','Intervention')
+            reports = ReportModel().get_specific_reports(
+                'type', 'Intervention'
+            )
         results = []
         for report in reports:
             dictionary = make_dictionary(report)
             results.append(dictionary)
         return {"status": 200, "data": results}
 
+
 class UserReports(Resource):
     @jwt_required
     def get(self, username):
-        reports = ReportModel().get_specific_reports('reporter',username)
+        reports = ReportModel().get_specific_reports('reporter', username)
         results = []
         for report in reports:
             dictionary = make_dictionary(report)
             results.append(dictionary)
         return {"status": 200, "data": results}
+
 
 class UserReportsByType(Resource):
     @jwt_required
     def get(self, username, type):
         if type == 'red-flags':
-            reports = ReportModel().get_all_user_reports_by_type(username, 'Red-Flag')
+            reports = ReportModel().get_all_user_reports_by_type(
+                username, 'Red-Flag'
+            )
         elif type == 'interventions':
-            reports = ReportModel().get_all_user_reports_by_type(username, 'Intervention')
+            reports = ReportModel().get_all_user_reports_by_type(
+                username, 'Intervention'
+            )
         results = []
         for report in reports:
             dictionary = make_dictionary(report)
             results.append(dictionary)
         return {"status": 200, "data": results}
+
 
 class Report(Resource):
     @jwt_required
@@ -96,7 +108,9 @@ class Report(Resource):
         if report:
             return {
                 "status": 200,
-                "data": [make_dictionary(report)]
+                "data": [
+                    make_dictionary(report)
+                ]
             }
         else:
             return ({"status": 404, "error": "Report not found."}, 404)
@@ -109,13 +123,28 @@ class Report(Resource):
             if report[1] == current_user:
                 if report[5] == "Draft":
                     ReportModel().delete(id)
-                    return {"status": 200, "data": [{"id": id, "message": "Report has been deleted."}]}
+                    return {
+                        "status": 200,
+                        "data": [
+                            {
+                                "id": id,
+                                "message": "Report has been deleted."
+                            }
+                        ]
+                    }
                 else:
-                    return {"status": 405, "error": "Report cannot be deleted because it has already been submitted."}, 405
+                    return {
+                        "status": 405,
+                        "error": "Report cannot be deleted because it has already been submitted."
+                    }, 405
             else:
-                return {"status": 401, "error": "You are not allowed to delete this report."}, 401
+                return {
+                    "status": 401,
+                    "error": "You are not allowed to delete this report."
+                }, 401
         else:
             return {"status": 404, "error": "Report not found."}, 404
+
 
 class EditReport(Resource):
     @jwt_required
@@ -135,19 +164,39 @@ class EditReport(Resource):
                     ReportModel().edit_report(id, key, new_data[key])
                     report = ReportModel().get_specific_report(id)
                     updated_report = make_dictionary(report)
-                    return {"status": 200, "data": [{"report": updated_report, "message": "Updated report's {}.".format("location" if key == "location" else "comment")}]}
+                    return {
+                        "status": 200,
+                        "data": [
+                            {
+                                "report": updated_report,
+                                "message": "Updated report's {}.".format(
+                                    "location" if key == "location"
+                                    else "comment"
+                                )
+                            }
+                        ]
+                    }
                 else:
-                    return {"status": 405, "error": "Report cannot be edited because it has already been submitted."}, 405
+                    return {
+                        "status": 405,
+                        "error": "Report cannot be edited because it has already been submitted."
+                    }, 405
             else:
-                return {"status": 401, "error": "You are not allowed to edit this report."}, 401
+                return {
+                    "status": 401,
+                    "error": "You are not allowed to edit this report."
+                }, 401
         else:
             return {"status": 404, "error": "Report not found."}, 404
+
 
 class ChangeReportStatus(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
-        current_user_details = UserModel().get_specific_user('username', current_user)
+        current_user_details = UserModel().get_specific_user(
+            'username', current_user
+        )
         report = ReportModel().get_specific_report(id)
         if report:
             if current_user_details[1]:
@@ -161,8 +210,19 @@ class ChangeReportStatus(Resource):
                 ReportModel().change_report_status(id, new_status["status"])
                 report = ReportModel().get_specific_report(id)
                 updated_report = make_dictionary(report)
-                return {"status": 200, "data": [{"report": updated_report, "message": "Updated report's status."}]}
+                return {
+                    "status": 200,
+                    "data": [
+                        {
+                            "report": updated_report,
+                            "message": "Updated report's status."
+                        }
+                    ]
+                }
             else:
-                return {"status": 401, "error": "You are not allowed to change a report's status."}, 401
+                return {
+                    "status": 401,
+                    "error": "You are not allowed to change a report's status."
+                }, 401
         else:
             return {"status": 404, "error": "Report not found."}, 404
