@@ -5,7 +5,7 @@ from app.utils.test_variables import (
     report_in_draft, report_with_invalid_type, report_with_invalid_location,
     report_with_invalid_comment, new_valid_status, new_invalid_status,
     new_valid_location, new_valid_comment, new_invalid_location,
-    new_invalid_comment
+    new_invalid_comment, new_valid_type, new_valid_title
 )
 
 
@@ -162,6 +162,37 @@ class TestReports(BaseTests):
         self.assertEqual(data["data"][0]["id"], 2)
         self.assertEqual(data["data"][0]["type"], 'Intervention')
 
+    def test_user_not_found(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+
+        response = self.test_client.get(
+            '/api/v2/users/raiden/reports', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "User not found."})
+
+        response = self.test_client.get(
+            '/api/v2/users/raiden/reports/red-flags', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "User not found."})
+
+        response = self.test_client.get(
+            '/api/v2/users/raiden/reports/interventions', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data, {"status": 404, "error": "User not found."})
+
     def test_get_specific_report(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
@@ -305,6 +336,41 @@ class TestReports(BaseTests):
                 "message": {
                     "comment": "comment cannot be blank."
                 }
+            }
+        )
+
+    def test_wrong_key_to_edit(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+        self.createRedFlagAndInterventionReportsForTesting()
+
+        response = self.test_client.patch(
+            '/api/v2/reports/1/type', json=new_valid_type,
+            headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(
+            data, {
+                "status": 401,
+                "error": "You can only edit a report's location and comment."
+            }
+        )
+
+        response = self.test_client.patch(
+            '/api/v2/reports/2/title', json=new_valid_title,
+            headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data, {
+                "status": 400,
+                "error": "This report does not have a title."
             }
         )
 
