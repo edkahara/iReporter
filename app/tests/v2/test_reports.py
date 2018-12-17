@@ -37,8 +37,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "type": "Type can only be strictly either 'Red-Flag' or \
-                    'Intervention'."
+                    "type": "Type can only be strictly either 'Red-Flag' or "
+                    "'Intervention'."
                 }
             }
         )
@@ -57,10 +57,10 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "location": "Location can only be strictly of the form \
-                    'number within the range [-90,90] representing the \
-                    latitude,number within the range [-180,180] \
-                    representing the longitude'."
+                    "location": "Location can only be strictly of the form "
+                    "'number within the range [-90,90] representing the "
+                    "latitude,number within the range [-180,180] "
+                    "representing the longitude'."
                 }
             }
         )
@@ -246,8 +246,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "status": "Status can only be strictly either 'Draft' \
-                    or 'Under Investigation' or 'Resolved' or 'Rejected'."
+                    "status": "Status can only be strictly either 'Draft' "
+                    "or 'Under Investigation' or 'Resolved' or 'Rejected'."
                 }
             }
         )
@@ -315,10 +315,10 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "location": "Location can only be strictly of the form \
-                    'number within the range [-90,90] representing the \
-                    latitude,number within the range [-180,180] \
-                    representing the longitude'."
+                    "location": "Location can only be strictly of the form "
+                    "'number within the range [-90,90] representing the "
+                    "latitude,number within the range [-180,180] "
+                    "representing the longitude'."
                 }
             }
         )
@@ -473,7 +473,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be edited because it has already been submitted."
+                "error": "Report cannot be edited "
+                "because it has already been submitted."
             }
         )
 
@@ -488,7 +489,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be edited because it has already been submitted."
+                "error": "Report cannot be edited "
+                "because it has already been submitted."
             }
         )
 
@@ -502,7 +504,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be deleted because it has already been submitted."
+                "error": "Report cannot be deleted "
+                "because it has already been submitted."
             }
         )
 
