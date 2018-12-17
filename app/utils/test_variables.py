@@ -58,6 +58,14 @@ new_invalid_comment = {
     "comment": ""
 }
 
+new_valid_type = {
+    "type": "Intervention"
+}
+
+new_valid_title = {
+    "title": "Bribery incident"
+}
+
 new_user_same_passwords = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
