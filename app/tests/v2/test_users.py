@@ -70,9 +70,9 @@ class TestUsers(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "email": "Email can only be strictly of the following \
-                    format: (letters or numbers or both with only one \
-                    optional dot in-between)@(only letters).com."
+                    "email": "Email can only be strictly of the following "
+                    "format: (letters or numbers or both with only one "
+                    "optional dot in-between)@(only letters).com."
                 }
             }
         )
@@ -86,9 +86,9 @@ class TestUsers(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "username": "Username can only be strictly between 5 \
-                    and 25 characters long and can only contain lowercase \
-                    letters, numbers and underscores."
+                    "username": "Username can only be strictly between 5 "
+                    "and 25 characters long and can only contain lowercase "
+                    "letters, numbers and underscores."
                 }
             }
         )

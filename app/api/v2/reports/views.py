@@ -143,7 +143,8 @@ class Report(Resource):
                 else:
                     return {
                         "status": 405,
-                        "error": "Report cannot be deleted because it has already been submitted."
+                        "error": "Report cannot be deleted "
+                        "because it has already been submitted."
                     }, 405
             else:
                 return {
@@ -199,7 +200,8 @@ class EditReport(Resource):
                 else:
                     return {
                         "status": 405,
-                        "error": "Report cannot be edited because it has already been submitted."
+                        "error": "Report cannot be edited "
+                        "because it has already been submitted."
                     }, 405
             else:
                 return {

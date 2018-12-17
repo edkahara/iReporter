@@ -24,9 +24,9 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "email": "Email can only be strictly of the following \
-                    format: (letters or numbers or both with only one \
-                    optional dot in-between)@(only letters).com."
+                    "email": "Email can only be strictly of the following "
+                    "format: (letters or numbers or both with only one "
+                    "optional dot in-between)@(only letters).com."
                 }
             }
         elif (
@@ -38,9 +38,9 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "phonenumber": "Phone Number can only be strictly of the \
-                    following format: +(country code)(rest of the \
-                    phonenumber)."
+                    "phonenumber": "Phone Number can only be strictly of the "
+                    "following format: +(country code)(rest of the "
+                    "phonenumber)."
                 }
             }
         elif (
@@ -52,9 +52,9 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "username": "Username can only be strictly between 5 \
-                    and 25 characters long and can only contain lowercase \
-                    letters, numbers and underscores."
+                    "username": "Username can only be strictly between 5 "
+                    "and 25 characters long and can only contain lowercase "
+                    "letters, numbers and underscores."
                 }
             }
         elif (
@@ -66,10 +66,10 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "location": "Location can only be strictly of the form \
-                    'number within the range [-90,90] representing the \
-                    latitude,number within the range [-180,180] \
-                    representing the longitude'."
+                    "location": "Location can only be strictly of the form "
+                    "'number within the range [-90,90] representing the "
+                    "latitude,number within the range [-180,180] "
+                    "representing the longitude'."
                 }
             }
         elif (
@@ -81,8 +81,8 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "type": "Type can only be strictly either 'Red-Flag' or \
-                    'Intervention'."
+                    "type": "Type can only be strictly either 'Red-Flag' or "
+                    "'Intervention'."
                 }
             }
         elif (
@@ -95,7 +95,7 @@ def validate_input(user_input):
         ):
             return {
                 "message": {
-                    "status": "Status can only be strictly either 'Draft' \
-                    or 'Under Investigation' or 'Resolved' or 'Rejected'."
+                    "status": "Status can only be strictly either 'Draft' "
+                    "or 'Under Investigation' or 'Resolved' or 'Rejected'."
                 }
             }
