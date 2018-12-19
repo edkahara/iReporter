@@ -23,17 +23,11 @@ class Reports(Resource):
     @jwt_required
     def get(self):
         reports = ReportModel().get_all_reports()
-        if reports:
-            results = []
-            for report in reports:
-                dictionary = make_dictionary(report)
-                results.append(dictionary)
-            return {"status": 200, "data": results}
-        else:
-            return {
-                "status": 200,
-                "message": "No reports have been created."
-            }
+        results = []
+        for report in reports:
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
+        return {"status": 200, "data": results}
 
     @jwt_required
     def post(self):
@@ -71,17 +65,11 @@ class ReportsByType(Resource):
             reports = ReportModel().get_specific_reports(
                 'type', 'Intervention'
             )
-        if reports:
-            results = []
-            for report in reports:
-                dictionary = make_dictionary(report)
-                results.append(dictionary)
-            return {"status": 200, "data": results}
-        else:
-            return {
-                "status": 200,
-                "message": "No {} have been created.".format(type)
-            }
+        results = []
+        for report in reports:
+            dictionary = make_dictionary(report)
+            results.append(dictionary)
+        return {"status": 200, "data": results}
 
 
 class UserReports(Resource):
@@ -90,17 +78,11 @@ class UserReports(Resource):
         user = UserModel().get_specific_user('username', username)
         if user:
             reports = ReportModel().get_specific_reports('reporter', username)
-            if reports:
-                results = []
-                for report in reports:
-                    dictionary = make_dictionary(report)
-                    results.append(dictionary)
-                return {"status": 200, "data": results}
-            else:
-                return {
-                    "status": 200,
-                    "message": "{} has not created any reports.".format(username)
-                }
+            results = []
+            for report in reports:
+                dictionary = make_dictionary(report)
+                results.append(dictionary)
+            return {"status": 200, "data": results}
         else:
             return {"status": 404, "error": "User not found."}, 404
 
@@ -118,17 +100,11 @@ class UserReportsByType(Resource):
                 reports = ReportModel().get_all_user_reports_by_type(
                     username, 'Intervention'
                 )
-            if reports:
-                results = []
-                for report in reports:
-                    dictionary = make_dictionary(report)
-                    results.append(dictionary)
-                return {"status": 200, "data": results}
-            else:
-                return {
-                    "status": 200,
-                    "message": "{} has not created any {}.".format(username, type)
-                }
+            results = []
+            for report in reports:
+                dictionary = make_dictionary(report)
+                results.append(dictionary)
+            return {"status": 200, "data": results}
         else:
             return {"status": 404, "error": "User not found."}, 404
 

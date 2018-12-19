@@ -61,7 +61,7 @@ class TestUsers(BaseTests):
             }
         )
 
-    def test_sign_up_unsuccessful_invalid_email(self):
+    def test_sign_up_unsuccessful_invalid_data(self):
         response = self.test_client.post(
             '/api/v2/auth/signup', json=new_user_invalid_email
         )
@@ -77,7 +77,6 @@ class TestUsers(BaseTests):
             }
         )
 
-    def test_sign_up_unsuccessful_invalid_username(self):
         response = self.test_client.post(
             '/api/v2/auth/signup', json=new_user_invalid_username
         )
@@ -93,7 +92,6 @@ class TestUsers(BaseTests):
             }
         )
 
-    def test_sign_up_unsuccessful_invalid_phonenumber(self):
         response = self.test_client.post(
             '/api/v2/auth/signup', json=new_user_invalid_phonenumber
         )
