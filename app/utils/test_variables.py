@@ -58,14 +58,6 @@ new_invalid_comment = {
     "comment": ""
 }
 
-new_valid_type = {
-    "type": "Intervention"
-}
-
-new_valid_title = {
-    "title": "Bribery incident"
-}
-
 new_user_same_passwords = {
     "firstname": "Bo",
     "lastname": "Rai Cho",
@@ -162,6 +154,16 @@ new_user_invalid_username = {
     "email": "boraico@gmail.com",
     "phonenumber": "+2540123456789",
     "username": " ",
+    "password": "boraicho",
+    "password_confirmation": "boraicho"
+}
+
+new_user_invalid_phonenumber = {
+    "firstname": "Bo",
+    "lastname": "Rai Cho",
+    "email": "boraico@gmail.com",
+    "phonenumber": "40123456789",
+    "username": "boraicho",
     "password": "boraicho",
     "password_confirmation": "boraicho"
 }

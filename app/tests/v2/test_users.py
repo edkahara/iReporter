@@ -4,7 +4,7 @@ from .base_tests import BaseTests
 from app.utils.test_variables import (
     new_user_same_passwords, new_user_empty_firstname, new_user_empty_lastname,
     new_user_empty_password, new_user_invalid_email, new_user_invalid_username,
-    new_user_different_passwords, new_user_taken_email,
+    new_user_invalid_phonenumber, new_user_different_passwords, new_user_taken_email,
     new_user_taken_phonenumber, new_user_taken_username,
     new_user_login_correct_details, admin_login_correct_details,
     new_user_login_incorrect_password, new_user_login_nonexistent_username,
@@ -89,6 +89,22 @@ class TestUsers(BaseTests):
                     "username": "Username can only be strictly between 5 "
                     "and 25 characters long and can only contain lowercase "
                     "letters, numbers and underscores."
+                }
+            }
+        )
+
+    def test_sign_up_unsuccessful_invalid_phonenumber(self):
+        response = self.test_client.post(
+            '/api/v2/auth/signup', json=new_user_invalid_phonenumber
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data, {
+                "message": {
+                    "phonenumber": "Phone Number can only be strictly of the "
+                    "following format: +(country code)(rest of the "
+                    "phonenumber)."
                 }
             }
         )

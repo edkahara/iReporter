@@ -5,7 +5,7 @@ from app.utils.test_variables import (
     report_in_draft, report_with_invalid_type, report_with_invalid_location,
     report_with_invalid_comment, new_valid_status, new_invalid_status,
     new_valid_location, new_valid_comment, new_invalid_location,
-    new_invalid_comment, new_valid_type, new_valid_title
+    new_invalid_comment
 )
 
 
@@ -162,6 +162,94 @@ class TestReports(BaseTests):
         self.assertEqual(data["data"][0]["id"], 2)
         self.assertEqual(data["data"][0]["type"], 'Intervention')
 
+    def test_no_content(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+
+        response = self.test_client.get(
+            '/api/v2/reports', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data, {
+                "status": 200,
+                "message": "No reports have been created."
+            }
+        )
+
+        response = self.test_client.get(
+            '/api/v2/reports/red-flags', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data,{
+                "status": 200,
+                "message": "No red-flags have been created."
+            }
+        )
+
+        response = self.test_client.get(
+            '/api/v2/reports/interventions', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data, {
+                "status": 200,
+                "message": "No interventions have been created."
+            }
+        )
+
+        response = self.test_client.get(
+            '/api/v2/users/boraicho/reports', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data, {
+                "status": 200,
+                "message": "boraicho has not created any reports."
+            }
+        )
+
+        response = self.test_client.get(
+            '/api/v2/users/boraicho/reports/red-flags', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data, {
+                "status": 200,
+                "message": "boraicho has not created any red-flags."
+            }
+        )
+
+        response = self.test_client.get(
+            '/api/v2/users/boraicho/reports/interventions', headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data, {
+                "status": 200,
+                "message": "boraicho has not created any interventions."
+            }
+        )
+
     def test_user_not_found(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
@@ -263,10 +351,10 @@ class TestReports(BaseTests):
             )
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             data, {
-                "status": 401,
+                "status": 403,
                 "error": "You are not allowed to change a report's status."
             }
         )
@@ -339,41 +427,6 @@ class TestReports(BaseTests):
             }
         )
 
-    def test_wrong_key_to_edit(self):
-        self.createAccountForTesting()
-        access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
-
-        response = self.test_client.patch(
-            '/api/v2/reports/1/type', json=new_valid_type,
-            headers=dict(
-                Authorization="Bearer " + access_token
-            )
-        )
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(
-            data, {
-                "status": 401,
-                "error": "You can only edit a report's location and comment."
-            }
-        )
-
-        response = self.test_client.patch(
-            '/api/v2/reports/2/title', json=new_valid_title,
-            headers=dict(
-                Authorization="Bearer " + access_token
-            )
-        )
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            data, {
-                "status": 400,
-                "error": "This report does not have a title."
-            }
-        )
-
     def test_delete_specific_report(self):
         self.createRedFlagAndInterventionReportsForTesting()
         access_token = self.logInForTesting()
@@ -408,10 +461,10 @@ class TestReports(BaseTests):
             )
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             data, {
-                "status": 401,
+                "status": 403,
                 "error": "You are not allowed to edit this report."
             }
         )
@@ -422,10 +475,10 @@ class TestReports(BaseTests):
             )
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             data, {
-                "status": 401,
+                "status": 403,
                 "error": "You are not allowed to edit this report."
             }
         )
@@ -436,10 +489,10 @@ class TestReports(BaseTests):
             )
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             data, {
-                "status": 401,
+                "status": 403,
                 "error": "You are not allowed to delete this report."
             }
         )
