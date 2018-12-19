@@ -23,11 +23,17 @@ class Reports(Resource):
     @jwt_required
     def get(self):
         reports = ReportModel().get_all_reports()
-        results = []
-        for report in reports:
-            dictionary = make_dictionary(report)
-            results.append(dictionary)
-        return {"status": 200, "data": results}
+        if reports:
+            results = []
+            for report in reports:
+                dictionary = make_dictionary(report)
+                results.append(dictionary)
+            return {"status": 200, "data": results}
+        else:
+            return {
+                "status": 200,
+                "message": "No reports have been created."
+            }
 
     @jwt_required
     def post(self):
@@ -65,11 +71,17 @@ class ReportsByType(Resource):
             reports = ReportModel().get_specific_reports(
                 'type', 'Intervention'
             )
-        results = []
-        for report in reports:
-            dictionary = make_dictionary(report)
-            results.append(dictionary)
-        return {"status": 200, "data": results}
+        if reports:
+            results = []
+            for report in reports:
+                dictionary = make_dictionary(report)
+                results.append(dictionary)
+            return {"status": 200, "data": results}
+        else:
+            return {
+                "status": 200,
+                "message": "No {} have been created.".format(type)
+            }
 
 
 class UserReports(Resource):
@@ -78,11 +90,17 @@ class UserReports(Resource):
         user = UserModel().get_specific_user('username', username)
         if user:
             reports = ReportModel().get_specific_reports('reporter', username)
-            results = []
-            for report in reports:
-                dictionary = make_dictionary(report)
-                results.append(dictionary)
-            return {"status": 200, "data": results}
+            if reports:
+                results = []
+                for report in reports:
+                    dictionary = make_dictionary(report)
+                    results.append(dictionary)
+                return {"status": 200, "data": results}
+            else:
+                return {
+                    "status": 200,
+                    "message": "{} has not created any reports.".format(username)
+                }
         else:
             return {"status": 404, "error": "User not found."}, 404
 
@@ -100,11 +118,17 @@ class UserReportsByType(Resource):
                 reports = ReportModel().get_all_user_reports_by_type(
                     username, 'Intervention'
                 )
-            results = []
-            for report in reports:
-                dictionary = make_dictionary(report)
-                results.append(dictionary)
-            return {"status": 200, "data": results}
+            if reports:
+                results = []
+                for report in reports:
+                    dictionary = make_dictionary(report)
+                    results.append(dictionary)
+                return {"status": 200, "data": results}
+            else:
+                return {
+                    "status": 200,
+                    "message": "{} has not created any {}.".format(username, type)
+                }
         else:
             return {"status": 404, "error": "User not found."}, 404
 
@@ -148,9 +172,9 @@ class Report(Resource):
                     }, 405
             else:
                 return {
-                    "status": 401,
+                    "status": 403,
                     "error": "You are not allowed to delete this report."
-                }, 401
+                }, 403
         else:
             return {"status": 404, "error": "Report not found."}, 404
 
@@ -164,39 +188,28 @@ class EditReport(Resource):
             report_dictionary = make_dictionary(report)
             if report[1] == current_user:
                 if report[5] == "Draft":
-                    if (key == "location") or (key == "comment"):
-                        data = request.get_json()
-                        new_data = {
-                            key: data[key]
-                        }
-                        invalid = validate_input(new_data)
-                        if invalid:
+                    data = request.get_json()
+                    new_data = {
+                        key: data[key]
+                    }
+                    invalid = validate_input(new_data)
+                    if invalid:
                             return invalid, 400
-                        ReportModel().edit_report(id, key, new_data[key])
-                        report = ReportModel().get_specific_report(id)
-                        updated_report = make_dictionary(report)
-                        return {
-                            "status": 200,
-                            "data": [
-                                {
-                                    "report": updated_report,
-                                    "message": "Updated report's {}.".format(
-                                        "location" if key == "location"
-                                        else "comment"
-                                    )
-                                }
-                            ]
-                        }
-                    elif key in report_dictionary:
-                        return {
-                            "status": 401,
-                            "error": "You can only edit a report's location and comment."
-                        }, 401
-                    else:
-                        return {
-                            "status": 400,
-                            "error": "This report does not have a {}.".format(key)
-                        }, 400
+                    ReportModel().edit_report(id, key, new_data[key])
+                    report = ReportModel().get_specific_report(id)
+                    updated_report = make_dictionary(report)
+                    return {
+                        "status": 200,
+                        "data": [
+                            {
+                                "report": updated_report,
+                                "message": "Updated report's {}.".format(
+                                    "location" if key == "location"
+                                    else "comment"
+                                )
+                            }
+                        ]
+                    }
                 else:
                     return {
                         "status": 405,
@@ -205,9 +218,9 @@ class EditReport(Resource):
                     }, 405
             else:
                 return {
-                    "status": 401,
+                    "status": 403,
                     "error": "You are not allowed to edit this report."
-                }, 401
+                }, 403
         else:
             return {"status": 404, "error": "Report not found."}, 404
 
@@ -243,8 +256,8 @@ class ChangeReportStatus(Resource):
                 }
             else:
                 return {
-                    "status": 401,
+                    "status": 403,
                     "error": "You are not allowed to change a report's status."
-                }, 401
+                }, 403
         else:
             return {"status": 404, "error": "Report not found."}, 404
