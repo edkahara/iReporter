@@ -36,7 +36,7 @@ th {
   color: white;
 }
 th, td {
-  border: 3px solid black;
+  border: 0.1px solid black;
   font-size: 20px;
   padding: 3px;
 }
@@ -149,15 +149,18 @@ hr {
   font-family: monospace;
   margin: 5px;
 }
-.date, .status {
+.date {
   width: 10%;
+}
+.status {
+  width: 15%;
 }
 .actions {
   width: 25%;
 }
 .powers {
   width: 75px;
-  height: 50px;
+  height: 30px;
   margin: 5px;
 }
 .reporter {
