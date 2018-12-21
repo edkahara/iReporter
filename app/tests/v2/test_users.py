@@ -216,8 +216,8 @@ class TestUsers(BaseTests):
         self.assertEqual(
             data, {
                 "status": 404,
-                "error": "The username you entered doesn't belong to an \
-                account."
+                "error": "The username you entered doesn't belong to an "
+                "account."
             }
         )
 
@@ -229,8 +229,8 @@ class TestUsers(BaseTests):
         self.assertEqual(
             data, {
                 "status": 404,
-                "error": "The username you entered doesn't belong to an \
-                account."
+                "error": "The username you entered doesn't belong to an "
+                "account."
             }
         )
 

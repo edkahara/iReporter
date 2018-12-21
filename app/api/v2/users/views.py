@@ -126,8 +126,8 @@ class UserLogin(Resource):
         else:
             return {
                 "status": 404,
-                "error": "The username you entered doesn't belong to an \
-                account."
+                "error": "The username you entered doesn't belong to an "
+                "account."
             }, 404
 
 
@@ -136,4 +136,4 @@ class UserLogout(Resource):
     def delete(self):
         jti = get_raw_jwt()["jti"]
         blacklist.add(jti)
-        return ({"status": 200, "message": "User logged out"})
+        return {"status": 200, "message": "User logged out"}
