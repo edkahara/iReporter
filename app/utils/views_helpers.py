@@ -69,37 +69,37 @@ def get_user_reports_by_type(username, type):
 
 def edit_location_or_comment(user_to_edit, report_id, key_to_edit, new_data):
     report = ReportModel().get_specific_report(report_id)
-    if report:
-        if report[1] == user_to_edit:
-            if report[5] == "Draft":
-                ReportModel().edit_report(report_id, key_to_edit, new_data[key_to_edit])
-                report = ReportModel().get_specific_report(report_id)
-                updated_report = make_dictionary('reports', report)
-                return {
-                    "status": 200,
-                    "data": [
-                        {
-                            "report": updated_report,
-                            "message": "Updated report's {}.".format(
-                                "location" if key_to_edit == "location"
-                                else "comment"
-                            )
-                        }
-                    ]
-                }
-            else:
-                return {
-                    "status": 405,
-                    "error": "Report cannot be edited "
-                    "because it has already been submitted."
-                }, 405
-        else:
-            return {
-                "status": 403,
-                "error": "You are not allowed to edit this report."
-            }, 403
-    else:
+    if not report:
         return {"status": 404, "error": "Report not found."}, 404
+
+    if not report[1] == user_to_edit:
+        return {
+            "status": 403,
+            "error": "You are not allowed to edit this report."
+        }, 403
+
+    if report[5] != "Draft":
+        return {
+            "status": 405,
+            "error": "Report cannot be edited "
+            "because it has already been submitted."
+        }, 405
+
+    ReportModel().edit_report(report_id, key_to_edit, new_data[key_to_edit])
+    report = ReportModel().get_specific_report(report_id)
+    updated_report = make_dictionary('reports', report)
+    return {
+        "status": 200,
+        "data": [
+            {
+                "report": updated_report,
+                "message": "Updated report's {}.".format(
+                    "location" if key_to_edit == "location"
+                    else "comment"
+                )
+            }
+        ]
+    }                    
 
 
 def check_for_existing_user(username, email, phonenumber):
