@@ -127,32 +127,33 @@ class Report(Resource):
     def delete(self, id):
         current_user = get_jwt_identity()
         report = ReportModel().get_specific_report(id)
-        if report:
-            if report[1] == current_user:
-                if report[5] == "Draft":
-                    ReportModel().delete(id)
-                    return {
-                        "status": 200,
-                        "data": [
-                            {
-                                "id": id,
-                                "message": "Report has been deleted."
-                            }
-                        ]
-                    }
-                else:
-                    return {
-                        "status": 405,
-                        "error": "Report cannot be deleted "
-                        "because it has already been submitted."
-                    }, 405
-            else:
-                return {
-                    "status": 403,
-                    "error": "You are not allowed to delete this report."
-                }, 403
-        else:
+
+        if not report:
             return {"status": 404, "error": "Report not found."}, 404
+
+        if not report[1] == current_user:
+            return {
+                "status": 403,
+                "error": "You are not allowed to delete this report."
+            }, 403
+
+        if report[5] != "Draft":
+            return {
+                "status": 405,
+                "error": "Report cannot be deleted "
+                "because it has already been submitted."
+            }, 405
+
+        ReportModel().delete(id)
+        return {
+            "status": 200,
+            "data": [
+                {
+                    "id": id,
+                    "message": "Report has been deleted."
+                }
+            ]
+        }
 
 
 class ChangeReportLocation(Resource):
