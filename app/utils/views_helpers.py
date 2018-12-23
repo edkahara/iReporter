@@ -100,3 +100,24 @@ def edit_location_or_comment(user_to_edit, report_id, key_to_edit, new_data):
             }, 403
     else:
         return {"status": 404, "error": "Report not found."}, 404
+
+
+def check_for_existing_user(username, email, phonenumber):
+    existing_user_by_username = UserModel().get_specific_user(
+        'username', username
+    )
+    existing_user_by_email = UserModel().get_specific_user(
+        'email', email
+    )
+    existing_user_by_phonenumber = UserModel().get_specific_user(
+        'phonenumber', phonenumber
+    )
+    if existing_user_by_email:
+        return {"status": 401, "error": "This email is taken."}
+    elif existing_user_by_username:
+        return {"status": 401, "error": "This username is taken."}
+    elif existing_user_by_phonenumber:
+        return {
+            "status": 401,
+            "error": "This phone number is taken."
+        }

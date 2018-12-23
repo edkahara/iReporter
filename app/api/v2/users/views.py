@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
-from app.utils.views_helpers import make_dictionary
+from app.utils.views_helpers import make_dictionary, check_for_existing_user
 from .models import UserModel
 
 
@@ -68,29 +68,13 @@ class UserSignup(Resource):
             "password": data["password"],
             "password_confirmation": data["password_confirmation"]
         }
-        existing_user_by_username = UserModel().get_specific_user(
-            'username', user_to_sign_up['username']
+        existing_user = check_for_existing_user(
+            user_to_sign_up['username'],
+            user_to_sign_up['email'],
+            user_to_sign_up['phonenumber']
         )
-        existing_user_by_email = UserModel().get_specific_user(
-            'email', user_to_sign_up['email']
-        )
-        existing_user_by_phonenumber = UserModel().get_specific_user(
-            'phonenumber', user_to_sign_up['phonenumber']
-        )
-        if (
-            existing_user_by_email or
-            existing_user_by_username or
-            existing_user_by_phonenumber
-        ):
-            if existing_user_by_email:
-                return {"status": 401, "error": "This email is taken."}, 401
-            elif existing_user_by_username:
-                return {"status": 401, "error": "This username is taken."}, 401
-            else:
-                return {
-                    "status": 401,
-                    "error": "This phone number is taken."
-                }, 401
+        if existing_user:
+            return existing_user, 401
         else:
             if (
                 user_to_sign_up["password"] ==
