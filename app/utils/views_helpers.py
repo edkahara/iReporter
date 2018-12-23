@@ -1,6 +1,7 @@
 from flask import json
 
 from app.api.v2.reports.models import ReportModel
+from app.api.v2.users.models import UserModel
 from .validators import validate_input
 
 
@@ -41,6 +42,14 @@ def get_all_reports_by_type(type):
         dictionary = make_dictionary('reports', report)
         results.append(dictionary)
     return {"status": 200, "data": results}
+
+
+def get_reports_by_user_and_type(username, type):
+    user = UserModel().get_specific_user('username', username)
+    if user:
+        return get_user_reports_by_type(username, type)
+    else:
+        return {"status": 404, "error": "User not found."}, 404
 
 
 def get_user_reports_by_type(username, type):
