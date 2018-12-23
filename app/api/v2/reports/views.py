@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.utils.views_helpers import (
     make_dictionary, get_all_reports_by_type, get_reports_by_user_and_type,
-    edit_location_or_comment
+    edit_location_or_comment, check_for_edit_or_delete_report_errors
 )
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
@@ -128,21 +128,9 @@ class Report(Resource):
         current_user = get_jwt_identity()
         report = ReportModel().get_specific_report(id)
 
-        if not report:
-            return {"status": 404, "error": "Report not found."}, 404
-
-        if not report[1] == current_user:
-            return {
-                "status": 403,
-                "error": "You are not allowed to delete this report."
-            }, 403
-
-        if report[5] != "Draft":
-            return {
-                "status": 405,
-                "error": "Report cannot be deleted "
-                "because it has already been submitted."
-            }, 405
+        report_error = check_for_edit_or_delete_report_errors(current_user, report, 'delete')
+        if report_error:
+            return report_error
 
         ReportModel().delete(id)
         return {

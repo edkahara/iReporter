@@ -438,8 +438,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be edited "
-                "because it has already been submitted."
+                "error": "You cannot edit "
+                "a report that has already been submitted."
             }
         )
 
@@ -454,8 +454,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be edited "
-                "because it has already been submitted."
+                "error": "You cannot edit "
+                "a report that has already been submitted."
             }
         )
 
@@ -469,8 +469,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "status": 405,
-                "error": "Report cannot be deleted "
-                "because it has already been submitted."
+                "error": "You cannot delete "
+                "a report that has already been submitted."
             }
         )
 

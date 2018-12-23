@@ -69,21 +69,10 @@ def get_user_reports_by_type(username, type):
 
 def edit_location_or_comment(user_to_edit, report_id, key_to_edit, new_data):
     report = ReportModel().get_specific_report(report_id)
-    if not report:
-        return {"status": 404, "error": "Report not found."}, 404
 
-    if not report[1] == user_to_edit:
-        return {
-            "status": 403,
-            "error": "You are not allowed to edit this report."
-        }, 403
-
-    if report[5] != "Draft":
-        return {
-            "status": 405,
-            "error": "Report cannot be edited "
-            "because it has already been submitted."
-        }, 405
+    report_error = check_for_edit_or_delete_report_errors(user_to_edit, report, 'edit')
+    if report_error:
+        return report_error
 
     ReportModel().edit_report(report_id, key_to_edit, new_data[key_to_edit])
     report = ReportModel().get_specific_report(report_id)
@@ -99,7 +88,7 @@ def edit_location_or_comment(user_to_edit, report_id, key_to_edit, new_data):
                 )
             }
         ]
-    }                    
+    }
 
 
 def check_for_existing_user(username, email, phonenumber):
@@ -121,3 +110,20 @@ def check_for_existing_user(username, email, phonenumber):
             "status": 401,
             "error": "This phone number is taken."
         }
+
+def check_for_edit_or_delete_report_errors(current_user, report, action):
+    if not report:
+        return {"status": 404, "error": "Report not found."}, 404
+
+    if not report[1] == current_user:
+        return {
+            "status": 403,
+            "error": "You are not allowed to {} this report.".format(action)
+        }, 403
+
+    if report[5] != "Draft":
+        return {
+            "status": 405,
+            "error": "You cannot {} "
+            "a report that has already been submitted.".format(action)
+        }, 405
