@@ -148,6 +148,7 @@ class ChangeReportLocation(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
+
         parser = reqparse.RequestParser()
         parser.add_argument(
             'location', required=True, location="json",
@@ -161,16 +162,17 @@ class ChangeReportLocation(Resource):
         )
         data = parser.parse_args()
 
-        new_data = {
+        new_location = {
             'location': data['location']
         }
-        return edit_location_or_comment(current_user, id, 'location', new_data)
+        return edit_location_or_comment(current_user, id, 'location', new_location)
 
 
 class ChangeReportComment(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
+
         parser = reqparse.RequestParser()
         parser.add_argument(
             'comment', required=True, location="json",
@@ -179,10 +181,10 @@ class ChangeReportComment(Resource):
         )
         data = parser.parse_args()
 
-        new_data = {
+        new_comment = {
             'comment': data['comment']
         }
-        return edit_location_or_comment(current_user, id, 'comment', new_data)
+        return edit_location_or_comment(current_user, id, 'comment', new_comment)
 
 
 class ChangeReportStatus(Resource):
