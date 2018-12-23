@@ -6,21 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
 from app.utils.validators import validate_input
+from app.utils.views_helpers import make_dictionary
 from .models import UserModel
-
-
-def make_dictionary(user_tuple):
-    return {
-        "id": user_tuple[0],
-        "isadmin": user_tuple[1],
-        "firstname": user_tuple[2],
-        "lastname": user_tuple[3],
-        "email": user_tuple[4],
-        "phonenumber": user_tuple[5],
-        "username": user_tuple[6],
-        "password": user_tuple[7],
-        "registered": json.dumps(user_tuple[8])
-    }
 
 
 class UserSignup(Resource):
@@ -79,7 +66,7 @@ class UserSignup(Resource):
                     "status": 201,
                     "data": [
                         {
-                            "user": make_dictionary(new_user),
+                            "user": make_dictionary('users', new_user),
                             "message": "User Created."
                         }
                     ]
@@ -112,7 +99,7 @@ class UserLogin(Resource):
                     "status": 200,
                     "data": [
                         {
-                            "user": make_dictionary(user_to_log_in),
+                            "user": make_dictionary('users', user_to_log_in),
                             "access_token": access_token,
                             "message": "User Logged In."
                         }
