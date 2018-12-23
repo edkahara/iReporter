@@ -78,7 +78,7 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data, {
             "message": {
-                "comment": "comment cannot be blank."
+                "comment": "Comment cannot be blank."
             }
         })
 
@@ -287,17 +287,17 @@ class TestReports(BaseTests):
         self.assertEqual(data["data"][0]["report"]["id"], 1)
         self.assertEqual(data["data"][0]["report"]["location"], "0,0")
 
-        #response = self.test_client.patch(
-        #    '/api/v2/reports/2/comment', json=new_valid_comment, headers=dict(
-        #        Authorization="Bearer " + access_token
-        #    )
-        #)
-        #data = json.loads(response.data)
-        #self.assertEqual(response.status_code, 200)
-        #self.assertEqual(data["data"][0]["report"]["id"], 2)
-        #self.assertEqual(
-        #    data["data"][0]["report"]["comment"], "It was a prank"
-        #)
+        response = self.test_client.patch(
+            '/api/v2/reports/2/comment', json=new_valid_comment, headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["data"][0]["report"]["id"], 2)
+        self.assertEqual(
+            data["data"][0]["report"]["comment"], "It was a prank"
+        )
 
     def test_invalid_edit_specific_report(self):
         self.createAccountForTesting()
@@ -323,21 +323,21 @@ class TestReports(BaseTests):
             }
         )
 
-        #response = self.test_client.patch(
-        #    '/api/v2/reports/2/comment', json=new_invalid_comment,
-        #    headers=dict(
-        #        Authorization="Bearer " + access_token
-        #    )
-        #)
-        #data = json.loads(response.data)
-        #self.assertEqual(response.status_code, 400)
-        #self.assertEqual(
-        #    data, {
-        #        "message": {
-        #            "comment": "comment cannot be blank."
-        #        }
-        #    }
-        #)
+        response = self.test_client.patch(
+            '/api/v2/reports/2/comment', json=new_invalid_comment,
+            headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data, {
+                "message": {
+                    "comment": "Comment cannot be blank."
+                }
+            }
+        )
 
     def test_delete_specific_report(self):
         self.createRedFlagAndInterventionReportsForTesting()
@@ -381,19 +381,19 @@ class TestReports(BaseTests):
             }
         )
 
-        #response = self.test_client.patch(
-        #    '/api/v2/reports/2/comment', json=new_valid_comment, headers=dict(
-        #        Authorization="Bearer " + access_token
-        #    )
-        #)
-        #data = json.loads(response.data)
-        #self.assertEqual(response.status_code, 403)
-        #self.assertEqual(
-        #    data, {
-        #        "status": 403,
-        #        "error": "You are not allowed to edit this report."
-        #    }
-        #)
+        response = self.test_client.patch(
+            '/api/v2/reports/2/comment', json=new_valid_comment, headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            data, {
+                "status": 403,
+                "error": "You are not allowed to edit this report."
+            }
+        )
 
         response = self.test_client.delete(
             '/api/v2/reports/2', headers=dict(
@@ -428,7 +428,7 @@ class TestReports(BaseTests):
         )
 
         response = self.test_client.patch(
-            '/api/v2/reports/1/location', json=new_invalid_location,
+            '/api/v2/reports/1/location', json=new_valid_location,
             headers=dict(
                 Authorization="Bearer " + user_access_token
             )
@@ -443,21 +443,21 @@ class TestReports(BaseTests):
             }
         )
 
-        #response = self.test_client.patch(
-        #    '/api/v2/reports/2/comment', json=new_invalid_comment,
-        #    headers=dict(
-        #        Authorization="Bearer " + user_access_token
-        #    )
-        #)
-        #data = json.loads(response.data)
-        #self.assertEqual(response.status_code, 405)
-        #self.assertEqual(
-        #    data, {
-        #        "status": 405,
-        #        "error": "Report cannot be edited "
-        #        "because it has already been submitted."
-        #    }
-        #)
+        response = self.test_client.patch(
+            '/api/v2/reports/2/comment', json=new_valid_comment,
+            headers=dict(
+                Authorization="Bearer " + user_access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(
+            data, {
+                "status": 405,
+                "error": "Report cannot be edited "
+                "because it has already been submitted."
+            }
+        )
 
         response = self.test_client.delete(
             '/api/v2/reports/2', headers=dict(

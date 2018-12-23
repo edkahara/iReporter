@@ -98,6 +98,16 @@ new_user_empty_password = {
     "password_confirmation": "boraicho"
 }
 
+new_user_empty_password_confirmation = {
+    "firstname": "Bo",
+    "lastname": "Rai Cho",
+    "email": "boraicho@gmail.com",
+    "phonenumber": "+2540123456789",
+    "username": "boraicho",
+    "password": "boraicho",
+    "password_confirmation": ""
+}
+
 new_user_different_passwords = {
     "firstname": "Bo",
     "lastname": "Rai Cho",

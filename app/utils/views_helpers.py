@@ -2,7 +2,6 @@ from flask import json
 
 from app.api.v2.reports.models import ReportModel
 from app.api.v2.users.models import UserModel
-from .validators import validate_input
 
 
 def make_dictionary(table_name, tuple):
@@ -57,7 +56,7 @@ def get_user_reports_by_type(username, type):
         reports = ReportModel().get_all_user_reports_by_type(
             username, 'Red-Flag'
         )
-    elif type == 'interventions':
+    else:
         reports = ReportModel().get_all_user_reports_by_type(
             username, 'Intervention'
         )
@@ -71,12 +70,8 @@ def get_user_reports_by_type(username, type):
 def edit_location_or_comment(user_to_edit, report_id, key_to_edit, new_data):
     report = ReportModel().get_specific_report(report_id)
     if report:
-        report_dictionary = make_dictionary('reports', report)
         if report[1] == user_to_edit:
             if report[5] == "Draft":
-                invalid = validate_input(new_data)
-                if invalid:
-                        return invalid, 400
                 ReportModel().edit_report(report_id, key_to_edit, new_data[key_to_edit])
                 report = ReportModel().get_specific_report(report_id)
                 updated_report = make_dictionary('reports', report)

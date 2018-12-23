@@ -1,3 +1,4 @@
+import re
 import datetime
 from flask import request, json
 from flask_restful import Resource, reqparse, inputs
@@ -5,14 +6,58 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.users import blacklist
-from app.utils.validators import validate_input
 from app.utils.views_helpers import make_dictionary
 from .models import UserModel
 
 
 class UserSignup(Resource):
     def post(self):
-        data = request.get_json()
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'firstname', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="First Name cannot be blank."
+        )
+        parser.add_argument(
+            'lastname', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="Last Name cannot be blank."
+        )
+        parser.add_argument(
+            'email', required=True, location="json",
+            type=inputs.regex(
+                r'^[a-z0-9](\.?[a-z0-9]){0,}@([a-z]){1,}\.com$'
+            ),
+            help="Email can only be strictly of the following "
+            "format: (letters or numbers or both with only one "
+            "optional dot in-between)@(only letters).com."
+        )
+        parser.add_argument(
+            'phonenumber', required=True, location="json",
+            type=inputs.regex(r'^(\+\d+)$'),
+            help="Phone Number can only be strictly of the "
+            "following format: +(country code)(rest of the "
+            "phonenumber)."
+        )
+        parser.add_argument(
+            'username', required=True, location="json",
+            type=inputs.regex(r'^([a-z0-9_]){5,25}$'),
+            help="Username can only be strictly between 5 "
+            "and 25 characters long and can only contain lowercase "
+            "letters, numbers and underscores."
+        )
+        parser.add_argument(
+            'password', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="Password cannot be blank."
+        )
+        parser.add_argument(
+            'password_confirmation', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="Password confirmation cannot be blank."
+        )
+        data = parser.parse_args()
+
         user_to_sign_up = {
             "isadmin": False,
             "firstname": data["firstname"],
@@ -23,9 +68,6 @@ class UserSignup(Resource):
             "password": data["password"],
             "password_confirmation": data["password_confirmation"]
         }
-        invalid = validate_input(user_to_sign_up)
-        if invalid:
-            return invalid, 400
         existing_user_by_username = UserModel().get_specific_user(
             'username', user_to_sign_up['username']
         )
@@ -81,6 +123,7 @@ class UserSignup(Resource):
 class UserLogin(Resource):
     def post(self):
         data = request.get_json()
+
         user = {
             "username": data["username"],
             "password": data["password"]

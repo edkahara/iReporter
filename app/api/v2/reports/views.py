@@ -1,14 +1,16 @@
+import re
 from flask import request, json
-from flask_restful import Resource
+from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from app.utils.validators import validate_input
 from app.utils.views_helpers import (
     make_dictionary, get_all_reports_by_type, get_reports_by_user_and_type,
     edit_location_or_comment
 )
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
+
+parser = reqparse.RequestParser()
 
 
 class Reports(Resource):
@@ -24,7 +26,30 @@ class Reports(Resource):
     @jwt_required
     def post(self):
         current_user = get_jwt_identity()
-        data = request.get_json()
+
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'location', required=True, location="json",
+            type=inputs.regex(
+                r'^[-]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$'
+            ),
+            help="Location can only be strictly of the form "
+            "'number within the range [-90,90] representing the "
+            "latitude,number within the range [-180,180] "
+            "representing the longitude'."
+        )
+        parser.add_argument(
+            'comment', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="Comment cannot be blank."
+        )
+        parser.add_argument(
+            'type', location="json", required=True,
+            type=inputs.regex(r'^\b(Red-Flag|Intervention)\b$'),
+            help="Type can only be strictly either 'Red-Flag' or 'Intervention'."
+        )
+        data = parser.parse_args()
+
         report_to_save = {
             "reporter": current_user,
             "type": data["type"],
@@ -32,9 +57,6 @@ class Reports(Resource):
             "comment": data["comment"],
             "status": "Draft"
         }
-        invalid = validate_input(report_to_save)
-        if invalid:
-            return invalid, 400
         saved_report_id = ReportModel().save(report_to_save)
         new_report = ReportModel().get_specific_report(saved_report_id)
         return {
@@ -137,7 +159,20 @@ class ChangeReportLocation(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
-        data = request.get_json()
+
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'location', required=True, location="json",
+            type=inputs.regex(
+                r'^[-]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$'
+            ),
+            help="Location can only be strictly of the form "
+            "'number within the range [-90,90] representing the "
+            "latitude,number within the range [-180,180] "
+            "representing the longitude'."
+        )
+        data = parser.parse_args()
+
         new_data = {
             'location': data['location']
         }
@@ -148,7 +183,15 @@ class ChangeReportComment(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
-        data = request.get_json()
+
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'comment', required=True, location="json",
+            type=inputs.regex(r'^(?!\s*$).+'),
+            help="Comment cannot be blank."
+        )
+        data = parser.parse_args()
+
         new_data = {
             'comment': data['comment']
         }
@@ -165,13 +208,20 @@ class ChangeReportStatus(Resource):
         report = ReportModel().get_specific_report(id)
         if report:
             if current_user_details[1]:
-                data = request.get_json()
+                parser = reqparse.RequestParser()
+                parser.add_argument(
+                    'status', required=True, location="json",
+                    type=inputs.regex(
+                        r'^\b(Draft|Under Investigation|Resolved|Rejected)\b$'
+                    ),
+                    help="Status can only be strictly either 'Draft' "
+                    "or 'Under Investigation' or 'Resolved' or 'Rejected'."
+                )
+                data = parser.parse_args()
+
                 new_status = {
                     "status": data["status"]
                 }
-                invalid = validate_input(new_status)
-                if invalid:
-                    return invalid, 400
                 ReportModel().change_report_status(id, new_status["status"])
                 report = ReportModel().get_specific_report(id)
                 updated_report = make_dictionary('reports', report)
