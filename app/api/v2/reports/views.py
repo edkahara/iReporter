@@ -148,7 +148,6 @@ class ChangeReportLocation(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
-
         parser = reqparse.RequestParser()
         parser.add_argument(
             'location', required=True, location="json",
@@ -172,7 +171,6 @@ class ChangeReportComment(Resource):
     @jwt_required
     def patch(self, id):
         current_user = get_jwt_identity()
-
         parser = reqparse.RequestParser()
         parser.add_argument(
             'comment', required=True, location="json",
