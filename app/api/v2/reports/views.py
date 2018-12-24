@@ -5,12 +5,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.utils.views_helpers import (
     make_dictionary, get_all_reports_by_type, get_reports_by_user_and_type,
-    edit_location_or_comment, check_for_edit_or_delete_report_errors
+    check_report_existence, edit_report_errors, delete_report_errors
 )
 from app.api.v2.users.models import UserModel
 from .models import ReportModel
-
-parser = reqparse.RequestParser()
 
 
 class Reports(Resource):
@@ -46,7 +44,8 @@ class Reports(Resource):
         parser.add_argument(
             'type', location="json", required=True,
             type=inputs.regex(r'^\b(Red-Flag|Intervention)\b$'),
-            help="Type can only be strictly either 'Red-Flag' or 'Intervention'."
+            help="Type can only be strictly either "
+            "'Red-Flag' or 'Intervention'."
         )
         data = parser.parse_args()
 
@@ -113,24 +112,28 @@ class Report(Resource):
     @jwt_required
     def get(self, id):
         report = ReportModel().get_specific_report(id)
-        if report:
-            return {
-                "status": 200,
-                "data": [
-                    make_dictionary('reports', report)
-                ]
-            }
-        else:
-            return {"status": 404, "error": "Report not found."}, 404
+
+        get_report_error = check_report_existence(report)
+        if get_report_error:
+            return get_report_error
+
+        return {
+            "status": 200,
+            "data": [
+                make_dictionary('reports', report)
+            ]
+        }
 
     @jwt_required
     def delete(self, id):
         current_user = get_jwt_identity()
-        report = ReportModel().get_specific_report(id)
+        current_user_details = UserModel().get_specific_user(
+            'username', current_user
+        )
 
-        report_error = check_for_edit_or_delete_report_errors(current_user, report, 'delete')
-        if report_error:
-            return report_error
+        delete_report_error = delete_report_errors(current_user, id)
+        if delete_report_error:
+            return delete_report_error
 
         ReportModel().delete(id)
         return {
@@ -144,89 +147,60 @@ class Report(Resource):
         }
 
 
-class ChangeReportLocation(Resource):
+class EditReport(Resource):
     @jwt_required
-    def patch(self, id):
+    def patch(self, id, key):
         current_user = get_jwt_identity()
 
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            'location', required=True, location="json",
-            type=inputs.regex(
-                r'^[-]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$'
-            ),
-            help="Location can only be strictly of the form "
-            "'number within the range [-90,90] representing the "
-            "latitude,number within the range [-180,180] "
-            "representing the longitude'."
-        )
-        data = parser.parse_args()
+        edit_report_error = edit_report_errors(current_user, id, key)
+        if edit_report_error:
+            return edit_report_error
 
-        new_location = {
-            'location': data['location']
-        }
-        return edit_location_or_comment(current_user, id, 'location', new_location)
-
-
-class ChangeReportComment(Resource):
-    @jwt_required
-    def patch(self, id):
-        current_user = get_jwt_identity()
-
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            'comment', required=True, location="json",
-            type=inputs.regex(r'^(?!\s*$).+'),
-            help="Comment cannot be blank."
-        )
-        data = parser.parse_args()
-
-        new_comment = {
-            'comment': data['comment']
-        }
-        return edit_location_or_comment(current_user, id, 'comment', new_comment)
-
-
-class ChangeReportStatus(Resource):
-    @jwt_required
-    def patch(self, id):
-        current_user = get_jwt_identity()
-        current_user_details = UserModel().get_specific_user(
-            'username', current_user
-        )
-        report = ReportModel().get_specific_report(id)
-        if report:
-            if current_user_details[1]:
-                parser = reqparse.RequestParser()
-                parser.add_argument(
-                    'status', required=True, location="json",
-                    type=inputs.regex(
-                        r'^\b(Draft|Under Investigation|Resolved|Rejected)\b$'
-                    ),
-                    help="Status can only be strictly either 'Draft' "
-                    "or 'Under Investigation' or 'Resolved' or 'Rejected'."
-                )
-                data = parser.parse_args()
-
-                new_status = {
-                    "status": data["status"]
-                }
-                ReportModel().change_report_status(id, new_status["status"])
-                report = ReportModel().get_specific_report(id)
-                updated_report = make_dictionary('reports', report)
-                return {
-                    "status": 200,
-                    "data": [
-                        {
-                            "report": updated_report,
-                            "message": "Updated report's status."
-                        }
-                    ]
-                }
-            else:
-                return {
-                    "status": 403,
-                    "error": "You are not allowed to change a report's status."
-                }, 403
+        if (key == 'location'):
+            parser = reqparse.RequestParser()
+            parser.add_argument(
+                'location', required=True, location="json",
+                type=inputs.regex(
+                    r'^[-]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$'
+                ),
+                help="Location can only be strictly of the form "
+                "'number within the range [-90,90] representing the "
+                "latitude,number within the range [-180,180] "
+                "representing the longitude'."
+            )
+        elif (key == 'comment'):
+            parser = reqparse.RequestParser()
+            parser.add_argument(
+                'comment', required=True, location="json",
+                type=inputs.regex(r'^(?!\s*$).+'),
+                help="Comment cannot be blank."
+            )
         else:
-            return {"status": 404, "error": "Report not found."}, 404
+            parser = reqparse.RequestParser()
+            parser.add_argument(
+                'status', required=True, location="json",
+                type=inputs.regex(
+                    r'^\b(Draft|Under Investigation|Resolved|Rejected)\b$'
+                ),
+                help="Status can only be strictly either 'Draft' "
+                "or 'Under Investigation' or 'Resolved' or 'Rejected'."
+            )
+
+        data = parser.parse_args()
+
+        new_data = {
+            key: data[key]
+        }
+
+        ReportModel().edit_report(id, key, new_data[key])
+        report = ReportModel().get_specific_report(id)
+        updated_report = make_dictionary('reports', report)
+        return {
+            "status": 200,
+            "data": [
+                {
+                    "report": updated_report,
+                    "message": "Updated report's {}.".format(key)
+                }
+            ]
+        }

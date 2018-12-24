@@ -1,5 +1,4 @@
 from flask import Flask, Blueprint
-from flask_restful import Resource, Api
 from flask_jwt_extended import JWTManager
 
 from .api.v2 import version_two as v2
@@ -17,6 +16,7 @@ def create_app(config_name):
         DBModel().create_admin()
 
     jwt = JWTManager(app)
+
     @jwt.token_in_blacklist_loader
     def check_if_token_in_blacklist(decrypted_token):
         jti = decrypted_token['jti']

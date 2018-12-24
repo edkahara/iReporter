@@ -68,13 +68,13 @@ class UserSignup(Resource):
             "password": data["password"],
             "password_confirmation": data["password_confirmation"]
         }
-        existing_user = check_for_existing_user(
+        existing_user_error = check_for_existing_user(
             user_to_sign_up['username'],
             user_to_sign_up['email'],
             user_to_sign_up['phonenumber']
         )
-        if existing_user:
-            return existing_user, 401
+        if existing_user_error:
+            return existing_user_error, 401
         else:
             if (
                 user_to_sign_up["password"] ==

@@ -5,7 +5,7 @@ from app.utils.test_variables import (
     report_in_draft, report_with_invalid_type, report_with_invalid_location,
     report_with_invalid_comment, new_valid_status, new_invalid_status,
     new_valid_location, new_valid_comment, new_invalid_location,
-    new_invalid_comment
+    new_invalid_comment, new_valid_type
 )
 
 
@@ -37,8 +37,8 @@ class TestReports(BaseTests):
         self.assertEqual(
             data, {
                 "message": {
-                    "type": "Type can only be strictly either 'Red-Flag' or "
-                    "'Intervention'."
+                    "type": "Type can only be strictly either "
+                    "'Red-Flag' or 'Intervention'."
                 }
             }
         )
@@ -336,6 +336,27 @@ class TestReports(BaseTests):
                 "message": {
                     "comment": "Comment cannot be blank."
                 }
+            }
+        )
+
+    def test_wrong_key_to_edit(self):
+        self.createAccountForTesting()
+        access_token = self.logInForTesting()
+        self.createRedFlagAndInterventionReportsForTesting()
+
+        response = self.test_client.patch(
+            '/api/v2/reports/1/type', json=new_valid_type,
+            headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data, {
+                "status": 400,
+                "error": "Only a report's location, "
+                "comment and status can be edited."
             }
         )
 
