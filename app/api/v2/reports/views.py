@@ -127,9 +127,6 @@ class Report(Resource):
     @jwt_required
     def delete(self, id):
         current_user = get_jwt_identity()
-        current_user_details = UserModel().get_specific_user(
-            'username', current_user
-        )
 
         delete_report_error = delete_report_errors(current_user, id)
         if delete_report_error:
