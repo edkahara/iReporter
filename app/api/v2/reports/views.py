@@ -156,7 +156,7 @@ class EditReport(Resource):
         if edit_report_error:
             return edit_report_error
 
-        if (key == 'location'):
+        if key == 'location':
             parser = reqparse.RequestParser()
             parser.add_argument(
                 'location', required=True, location="json",
@@ -168,7 +168,7 @@ class EditReport(Resource):
                 "latitude,number within the range [-180,180] "
                 "representing the longitude'."
             )
-        elif (key == 'comment'):
+        elif key == 'comment':
             parser = reqparse.RequestParser()
             parser.add_argument(
                 'comment', required=True, location="json",
