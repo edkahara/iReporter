@@ -8,7 +8,9 @@ from app.utils.test_variables import (
     new_user_invalid_phonenumber, new_user_different_passwords,
     new_user_taken_email, new_user_taken_phonenumber, new_user_taken_username,
     new_user_login_correct_details, admin_login_correct_details,
+    new_user_login_empty_username, new_user_login_empty_password,
     new_user_login_incorrect_password, new_user_login_nonexistent_username,
+    admin_login_empty_username, admin_login_empty_password,
     admin_login_nonexistent_username, admin_login_incorrect_password
 )
 
@@ -192,6 +194,29 @@ class TestUsers(BaseTests):
             '/api/v2/auth/login', json=admin_login_correct_details
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_log_in_unsuccessful_empty_data(self):
+        self.createAccountForTesting()
+
+        response = self.test_client.post(
+            '/api/v2/auth/login', json=new_user_login_empty_username
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.test_client.post(
+            '/api/v2/auth/login', json=new_user_login_empty_password
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.test_client.post(
+            '/api/v2/auth/login', json=admin_login_empty_username
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.test_client.post(
+            '/api/v2/auth/login', json=admin_login_empty_password
+        )
+        self.assertEqual(response.status_code, 400)
 
     def test_log_in_unsuccessful_incorrect_password(self):
         self.createAccountForTesting()

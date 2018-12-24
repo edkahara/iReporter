@@ -2,7 +2,8 @@ from flask import json
 
 from .base_tests import BaseTests
 from app.utils.test_variables import (
-    report_in_draft, report_with_invalid_type, report_with_invalid_location,
+    red_flag_report, intervention_report,
+    report_with_invalid_type, report_with_invalid_location,
     report_with_invalid_comment, new_valid_status, new_invalid_status,
     new_valid_location, new_valid_comment, new_invalid_location,
     new_invalid_comment, new_valid_type
@@ -15,13 +16,22 @@ class TestReports(BaseTests):
         access_token = self.logInForTesting()
 
         response = self.test_client.post(
-            '/api/v2/reports', json=report_in_draft, headers=dict(
+            '/api/v2/reports', json=red_flag_report, headers=dict(
                 Authorization="Bearer " + access_token
             )
         )
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data["data"][0]["report"]["id"], 1)
+
+        response = self.test_client.post(
+            '/api/v2/reports', json=intervention_report, headers=dict(
+                Authorization="Bearer " + access_token
+            )
+        )
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data["data"][0]["report"]["id"], 2)
 
     def test_invalid_report_type(self):
         self.createAccountForTesting()

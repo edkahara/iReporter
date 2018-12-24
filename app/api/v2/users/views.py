@@ -106,19 +106,28 @@ class UserSignup(Resource):
 
 class UserLogin(Resource):
     def post(self):
-        data = request.get_json()
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            'username', required=True, location="json",
+            type=str, help='Username cannot be blank.'
+        )
+        parser.add_argument(
+            'password', required=True, location="json",
+            type=str, help='Password cannot be blank.'
+        )
+        data = parser.parse_args()
 
-        user = {
+        user_credentials = {
             "username": data["username"],
             "password": data["password"]
         }
         user_to_log_in = UserModel().get_specific_user(
-            'username', user["username"]
+            'username', user_credentials["username"]
         )
         if user_to_log_in:
-            if check_password_hash(user_to_log_in[7], user["password"]):
+            if check_password_hash(user_to_log_in[7], user_credentials["password"]):
                 access_token = create_access_token(
-                    user["username"], expires_delta=datetime.timedelta(
+                    user_credentials["username"], expires_delta=datetime.timedelta(
                         minutes=60
                     )
                 )

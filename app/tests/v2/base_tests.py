@@ -8,7 +8,7 @@ from app.utils.test_variables import (
     admin_login_correct_details
 )
 from app.utils.test_variables import (
-    report_in_draft, red_flag_report, intervention_report
+    red_flag_report, intervention_report
 )
 
 

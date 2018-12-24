@@ -1,9 +1,3 @@
-report_in_draft = {
-    "type": "Intervention",
-    "location": "1,1",
-    "comment": "Undetermined"
-}
-
 red_flag_report = {
     "type": "Red-Flag",
     "location": "1,1",
@@ -187,6 +181,14 @@ new_user_login_correct_details = {
     "password": "boraicho"
 }
 
+new_user_login_empty_username = {
+    "password": "boraicho"
+}
+
+new_user_login_empty_password = {
+    "username": "boraicho"
+}
+
 new_user_login_incorrect_password = {
     "username": "boraicho",
     "password": "bo rai cho"
@@ -200,6 +202,14 @@ new_user_login_nonexistent_username = {
 admin_login_correct_details = {
     "username": "liukang",
     "password": "liukang"
+}
+
+admin_login_empty_username = {
+    "password": "liukang"
+}
+
+admin_login_empty_password = {
+    "username": "liukang"
 }
 
 admin_login_nonexistent_username = {
