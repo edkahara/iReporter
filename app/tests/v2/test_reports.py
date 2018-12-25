@@ -86,11 +86,13 @@ class TestReports(BaseTests):
         )
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data, {
-            "message": {
-                "comment": "Comment cannot be blank."
+        self.assertEqual(
+            data, {
+                "message": {
+                    "comment": "Comment cannot be blank."
+                }
             }
-        })
+        )
 
     def test_get_all_reports(self):
         self.createAccountForTesting()
