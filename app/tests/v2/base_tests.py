@@ -5,10 +5,8 @@ from app import create_app
 from instance.database import DBModel
 from app.utils.test_variables import (
     new_user_same_passwords, new_user_login_correct_details,
-    admin_login_correct_details
-)
-from app.utils.test_variables import (
-    red_flag_report, intervention_report
+    admin_login_correct_details,red_flag_report,
+    intervention_report
 )
 
 
