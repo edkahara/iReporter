@@ -188,12 +188,22 @@ class TestUsers(BaseTests):
         response = self.test_client.post(
             '/api/v2/auth/login', json=new_user_login_correct_details
         )
+        data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data["data"][0]["user"]["username"],
+            'boraicho'
+        )
 
         response = self.test_client.post(
             '/api/v2/auth/login', json=admin_login_correct_details
         )
+        data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            data["data"][0]["user"]["username"],
+            'liukang'
+        )
 
     def test_log_in_unsuccessful_empty_data(self):
         self.createAccountForTesting()
