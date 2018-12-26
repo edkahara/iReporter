@@ -1,19 +1,31 @@
 reports = []
 
-class ReportsModel:
+
+class ReportModel:
     total_reports_created = 1
 
-    def get_all_reports(username):
-        return list(filter(lambda x: x["reporter"] == username, reports))
+    def save(report):
+        reports.append(report)
+        ReportModel.total_reports_created += 1
+
+    def get_all_reports():
+        return reports
 
     def get_specific_report(report_id):
         return next(filter(lambda x: x["id"] == report_id, reports), None)
 
-    def save(report):
-        reports.append(report)
-        ReportsModel.total_reports_created += 1
+    def get_specific_reports(key, value):
+        return list(filter(lambda x: x[key] == value, reports))
 
-    def edit(report_id, new_data):
+    def get_all_user_reports_by_type(reporter_username, report_type):
+        user_reports = list(
+            filter(lambda x: x["reporter"] == reporter_username, reports)
+        )
+        return list(
+            filter(lambda x: x["type"] == report_type, user_reports)
+        )
+
+    def edit_report(report_id, new_data):
         report = next(filter(lambda x: x["id"] == report_id, reports))
         report.update(new_data)
 
@@ -22,4 +34,4 @@ class ReportsModel:
 
     def clear():
         reports.clear()
-        ReportsModel.total_reports_created = 1
+        ReportModel.total_reports_created = 1

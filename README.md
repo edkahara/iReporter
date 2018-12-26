@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/edkahara/iReporter.svg?branch=develop)](https://travis-ci.org/edkahara/iReporter) [![Coverage Status](https://coveralls.io/repos/github/edkahara/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/edkahara/iReporter?branch=develop) <a href="https://codeclimate.com/github/edkahara/iReporter/maintainability"><img src="https://api.codeclimate.com/v1/badges/c0b772db50ebe1ed6889/maintainability" /></a>
+[![Build Status](https://travis-ci.org/edkahara/iReporter.svg?branch=develop-v2)](https://travis-ci.org/edkahara/iReporter) [![Coverage Status](https://coveralls.io/repos/github/edkahara/iReporter/badge.svg?branch=develop-v2)](https://coveralls.io/github/edkahara/iReporter?branch=develop-v2) <a href="https://codeclimate.com/github/edkahara/iReporter/maintainability"><img src="https://api.codeclimate.com/v1/badges/c0b772db50ebe1ed6889/maintainability" /></a>
 
 # iReporter
 
@@ -8,18 +8,22 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 * Users can create accounts and log in.
 
-* Users can view, create, edit and delete their reports.
+* Users can create, edit, or delete their reports.
 
 * Users can create two types of reports:
-  - Red-Flag: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
+  - red-flag report: This is a report in which a user reports an incidence of corruption. For instance, a user can report a bribery incident.
 
-  - Intervention: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
+  - intervention report: This is a report in which a user reports an incident that requires government intervention. For instance, a user can report a flooding incident.
 
-* A user can edit both the location and the comment of a report they created.
+* In a report, a user can post and edit both the location of the incident and a comment on the incident.
 
 * All stories are reviewed by administrators, who can either place them under investigation, resolve them or reject them.
 
 ## Installation and deployment.
+
+### Create two postgresql databases
+
+  Create two postgresql databases, one for the app and one for testing, which you will use during this deployment.
 
 ### Clone this repository
 
@@ -27,19 +31,15 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 ### Set up a virtual environment and activate it
 
-  `py -3 -m venv env`
+  `python3 - m venv env`
 
-### Activate the virtual environment
+## Create a .env file in the root directory and fill it with details using .env.example as a template. Then type:
 
-  `env\Scripts\activate`
+  `source .env`
 
-### Install  all the packages and dependencies needed
+### Install dependencies needed
 
   `pip install -r requirements.txt`
-
-### Create an env.bat file using env.example as a template and then run
-
-  `env.bat`
 
 ### Run the application
 
@@ -47,26 +47,32 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
 ### Test the application
 
-  `nosetests` or `nosetests --with-coverage --cover-package=app` to see the test coverage
+  `nosetests --with-coverage --cover-package=app`
 
 ## Endpoints to test
 
-Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter.herokuapp.com) or your local server using POSTMAN:
+Here are the API endpoints which you can test using either the heroku app link (https://edkahara-ireporter-v1.herokuapp.com/) or your local server using POSTMAN:
 
-|    METHOD   |   ENDPOINT                                  | DESCRIPTION                           |    
-|-------------|---------------------------------------------|---------------------------------------|
-|   POST      |    /api/v1/auth/signup                      |   Sign a user up                      |
-|   POST      |    /api/v1/auth/signup                      |   Log a user in                       |
-|   POST      |    /api/v1/reports/                         |   Create a new report                 |
-|   GET       |    /api/v1/reports/                         |   Fetch all existing reports          |
-|   GET       |    /api/v1/reports/&lt;int:id&gt;           |   Fetch a specific report by its id   |
-|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/location  |   Edit a specific report's location   |
-|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/comment   |   Edit a specific report's comment    |
-|   DELETE    |    /api/v1/reports/&lt;int:id&gt;           |   Delete a specific report            |
+|    METHOD   |   ENDPOINT                                                 | DESCRIPTION                             |    
+|-------------|------------------------------------------------------------|-----------------------------------------|
+|   POST      |    /api/v1/users/signup                                    |   Sign a user up                        |
+|   POST      |    /api/v1/users/signup                                    |   Log a user in                         |
+|   POST      |    /api/v1/reports/                                        |   Create a new report                   |
+|   GET       |    /api/v1/reports/                                        |   Fetch all reports                     |
+|   GET       |    /api/v1/reports/red-flags                               |   Fetch all red-flag reports            |
+|   GET       |    /api/v1/reports/interventions                           |   Fetch all intervention reports        |
+|   GET       |    /api/v1/users/&lt;username&gt;/reports                  |   Fetch a user's reports                |
+|   GET       |    /api/v1/users/&lt;username&gt;/reports/red-flags        |   Fetch a user's red-flag reports       |
+|   GET       |    /api/v1/users/&lt;username&gt;/reports/interventions    |   Fetch a user's intervention reports   |
+|   GET       |    /api/v1/reports/&lt;int:id&gt;                          |   Fetch a specific report by its id     |
+|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/location                 |   Edit a specific report's location     |
+|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/comment                  |   Edit a specific report's comment      |
+|   PATCH     |    /api/v1/reports/&lt;int:id&gt;/status                   |   Edit a specific report's status       |
+|   DELETE    |    /api/v1/reports/&lt;int:id&gt;                          |   Delete a specific report              |
 
-## API Docs
+## API Documentation
 
-You can view the API documentation on https://documenter.getpostman.com/view/5360822/RzfiGTp4
+You can view the API documentation on https://ireporterv1.docs.apiary.io/
 
 # Author
 
