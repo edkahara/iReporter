@@ -125,9 +125,12 @@ class UserLogin(Resource):
             'username', user_credentials["username"]
         )
         if user_to_log_in:
-            if check_password_hash(user_to_log_in[7], user_credentials["password"]):
+            if check_password_hash(
+                user_to_log_in[7], user_credentials["password"]
+            ):
                 access_token = create_access_token(
-                    user_credentials["username"], expires_delta=datetime.timedelta(
+                    user_credentials["username"],
+                    expires_delta=datetime.timedelta(
                         minutes=60
                     )
                 )
