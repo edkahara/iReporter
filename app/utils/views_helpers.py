@@ -85,8 +85,8 @@ def check_report_existence(report):
         return {"status": 404, "error": "Report not found."}, 404
 
 
-def check_user_permissions_and_status(user_to_edit, report, action):
-    if report[1] != user_to_edit:
+def check_user_permissions_and_status(usernameusername, report, action):
+    if report[1] != usernameusername:
         return {
             "status": 403,
             "error": "You are not allowed to {} this report.".format(action)
@@ -100,9 +100,9 @@ def check_user_permissions_and_status(user_to_edit, report, action):
         }, 405
 
 
-def check_admin_permissions(current_user):
+def check_admin_permissions(username):
     current_user_details = UserModel().get_specific_user(
-        'username', current_user
+        'username', username
     )
 
     if not current_user_details[1]:
@@ -112,7 +112,7 @@ def check_admin_permissions(current_user):
         }, 403
 
 
-def edit_report_errors(user_to_edit, report_id, key_to_edit):
+def edit_report_errors(username, report_id, key_to_edit):
     invalid_key_error = check_key_to_edit(key_to_edit)
     if invalid_key_error:
         return invalid_key_error
@@ -124,18 +124,18 @@ def edit_report_errors(user_to_edit, report_id, key_to_edit):
         return report_existence_error
 
     if key_to_edit == 'status':
-        admin_permission_error = check_admin_permissions(user_to_edit)
+        admin_permission_error = check_admin_permissions(username)
         if admin_permission_error:
             return admin_permission_error
     else:
         user_edit_error = check_user_permissions_and_status(
-            user_to_edit, report, 'edit'
+            username, report, 'edit'
         )
         if user_edit_error:
             return user_edit_error
 
 
-def delete_report_errors(user_to_edit, report):
+def delete_report_errors(username, report):
     report = ReportModel().get_specific_report(report)
 
     report_existence_error = check_report_existence(report)
@@ -143,7 +143,7 @@ def delete_report_errors(user_to_edit, report):
         return report_existence_error
 
     user_delete_error = check_user_permissions_and_status(
-        user_to_edit, report, 'delete'
+        username, report, 'delete'
     )
     if user_delete_error:
         return user_delete_error

@@ -24,15 +24,6 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data["data"][0]["report"]["id"], 1)
 
-        response = self.test_client.post(
-            '/api/v2/reports', json=intervention_report, headers=dict(
-                Authorization="Bearer " + access_token
-            )
-        )
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(data["data"][0]["report"]["id"], 2)
-
     def test_invalid_report_type(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
@@ -97,7 +88,7 @@ class TestReports(BaseTests):
     def test_get_all_reports(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.get(
             '/api/v2/reports', headers=dict(
@@ -112,7 +103,7 @@ class TestReports(BaseTests):
     def test_get_all_reports_by_type(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.get(
             '/api/v2/reports/red-flags', headers=dict(
@@ -137,7 +128,7 @@ class TestReports(BaseTests):
     def test_get_all_user_reports(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.get(
             '/api/v2/users/boraicho/reports', headers=dict(
@@ -152,7 +143,7 @@ class TestReports(BaseTests):
     def test_get_all_user_reports_by_type(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.get(
             '/api/v2/users/boraicho/reports/red-flags', headers=dict(
@@ -208,7 +199,7 @@ class TestReports(BaseTests):
     def test_get_specific_report(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.get(
             '/api/v2/reports/1', headers=dict(
@@ -219,17 +210,8 @@ class TestReports(BaseTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["data"][0]["id"], 1)
 
-        response = self.test_client.get(
-            '/api/v2/reports/2', headers=dict(
-                Authorization="Bearer " + access_token
-            )
-        )
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["data"][0]["id"], 2)
-
     def test_valid_admin_status_change(self):
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
         access_token = self.adminLogInForTesting()
 
         response = self.test_client.patch(
@@ -245,7 +227,7 @@ class TestReports(BaseTests):
         )
 
     def test_invalid_admin_status_change(self):
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
         access_token = self.adminLogInForTesting()
 
         response = self.test_client.patch(
@@ -267,7 +249,7 @@ class TestReports(BaseTests):
     def test_unathorized_status_change(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.patch(
             '/api/v2/reports/1/status', json=new_valid_status, headers=dict(
@@ -286,7 +268,7 @@ class TestReports(BaseTests):
     def test_valid_edit_specific_report(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.patch(
             '/api/v2/reports/1/location', json=new_valid_location,
@@ -314,7 +296,7 @@ class TestReports(BaseTests):
     def test_invalid_edit_specific_report(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.patch(
             '/api/v2/reports/1/location', json=new_invalid_location,
@@ -354,7 +336,7 @@ class TestReports(BaseTests):
     def test_wrong_key_to_edit(self):
         self.createAccountForTesting()
         access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         response = self.test_client.patch(
             '/api/v2/reports/1/type', json=new_valid_type,
@@ -373,7 +355,7 @@ class TestReports(BaseTests):
         )
 
     def test_delete_specific_report(self):
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
         access_token = self.logInForTesting()
 
         response = self.test_client.delete(
@@ -396,7 +378,7 @@ class TestReports(BaseTests):
         )
 
     def test_unauthorized_report_edit_or_delete(self):
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
         access_token = self.adminLogInForTesting()
 
         response = self.test_client.patch(
@@ -445,7 +427,7 @@ class TestReports(BaseTests):
     def test_cannot_edit_or_delete_report_not_in_draft(self):
         self.createAccountForTesting()
         user_access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
 
         admin_access_token = self.adminLogInForTesting()
 
@@ -510,7 +492,7 @@ class TestReports(BaseTests):
     def test_report_not_found(self):
         self.createAccountForTesting()
         user_access_token = self.logInForTesting()
-        self.createRedFlagAndInterventionReportsForTesting()
+        self.createReportsForTesting()
         admin_access_token = self.adminLogInForTesting()
 
         response = self.test_client.get(
@@ -521,7 +503,8 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
-            data, {"status": 404, "error": "Report not found."})
+            data, {"status": 404, "error": "Report not found."}
+        )
 
         response = self.test_client.patch(
             '/api/v2/reports/0/status', json=new_valid_status, headers=dict(
@@ -531,7 +514,8 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
-            data, {"status": 404, "error": "Report not found."})
+            data, {"status": 404, "error": "Report not found."}
+        )
 
         response = self.test_client.patch(
             '/api/v2/reports/0/location', json=new_valid_location,
@@ -542,7 +526,8 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
-            data, {"status": 404, "error": "Report not found."})
+            data, {"status": 404, "error": "Report not found."}
+        )
 
         response = self.test_client.patch(
             '/api/v2/reports/0/comment', json=new_valid_comment, headers=dict(
@@ -552,7 +537,8 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
-            data, {"status": 404, "error": "Report not found."})
+            data, {"status": 404, "error": "Report not found."}
+        )
 
         response = self.test_client.delete(
             '/api/v2/reports/0', headers=dict(
@@ -562,4 +548,5 @@ class TestReports(BaseTests):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
-            data, {"status": 404, "error": "Report not found."})
+            data, {"status": 404, "error": "Report not found."}
+        )

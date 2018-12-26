@@ -38,7 +38,7 @@ class BaseTests(TestCase):
             data = json.loads(response.data)
             return data["data"][0]["access_token"]
 
-        def createRedFlagAndInterventionReportsForTesting(self):
+        def createReportsForTesting(self):
             self.createAccountForTesting()
             access_token = self.logInForTesting()
 
