@@ -18,9 +18,7 @@ class ReportModel:
         return list(filter(lambda x: x[key] == value, reports))
 
     def get_all_user_reports_by_type(reporter_username, report_type):
-        user_reports = list(
-            filter(lambda x: x["reporter"] == reporter_username, reports)
-        )
+        user_reports = ReportModel.get_specific_reports('reporter', reporter_username)
         return list(
             filter(lambda x: x["type"] == report_type, user_reports)
         )
