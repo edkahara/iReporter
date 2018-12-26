@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/edkahara/iReporter.svg?branch=develop-v2)](https://travis-ci.org/edkahara/iReporter) [![Coverage Status](https://coveralls.io/repos/github/edkahara/iReporter/badge.svg?branch=develop-v2)](https://coveralls.io/github/edkahara/iReporter?branch=develop-v2) <a href="https://codeclimate.com/github/edkahara/iReporter/maintainability"><img src="https://api.codeclimate.com/v1/badges/c0b772db50ebe1ed6889/maintainability" /></a>
+[![Build Status](https://travis-ci.org/edkahara/iReporter.svg?branch=develop)](https://travis-ci.org/edkahara/iReporter) [![Coverage Status](https://coveralls.io/repos/github/edkahara/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/edkahara/iReporter?branch=develop) <a href="https://codeclimate.com/github/edkahara/iReporter/maintainability"><img src="https://api.codeclimate.com/v1/badges/c0b772db50ebe1ed6889/maintainability" /></a>
 
 # iReporter
 
@@ -20,10 +20,6 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 * All stories are reviewed by administrators, who can either place them under investigation, resolve them or reject them.
 
 ## Installation and deployment.
-
-### Create two postgresql databases
-
-  Create two postgresql databases, one for the app and one for testing, which you will use during this deployment.
 
 ### Clone this repository
 
