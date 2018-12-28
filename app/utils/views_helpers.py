@@ -128,13 +128,7 @@ def check_admin_permissions(current_user):
         }, 403
 
 
-def edit_report_errors(user_to_edit, report_id, key_to_edit):
-    wrong_key_or_missing_report_error = check_wrong_key_and_report_existence(
-        key_to_edit, report_id
-    )
-    if wrong_key_or_missing_report_error:
-        return wrong_key_or_missing_report_error
-
+def check_key_and_permissions(key_to_edit, user_to_edit, report_id):
     report = ReportModel.get_specific_report(report_id)
 
     if key_to_edit == 'status':
@@ -147,6 +141,20 @@ def edit_report_errors(user_to_edit, report_id, key_to_edit):
         )
         if user_edit_error:
             return user_edit_error
+
+
+def edit_report_errors(user_to_edit, report_id, key_to_edit):
+    wrong_key_or_missing_report_error = check_wrong_key_and_report_existence(
+        key_to_edit, report_id
+    )
+    if wrong_key_or_missing_report_error:
+        return wrong_key_or_missing_report_error
+
+    key_and_permissions_error = check_key_and_permissions(
+        key_to_edit, user_to_edit, report_id
+    )
+    if key_and_permissions_error:
+        return key_and_permissions_error
 
 
 def delete_report_errors(user_to_delete, report):
