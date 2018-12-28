@@ -29,7 +29,7 @@ This is an iReporter web app. iReporter allows a user to report on corruption in
 
   `git clone https://github.com/edkahara/iReporter.git`
 
-### Set up a virtual environment and activate it
+### Set up a virtual environment
 
   `python3 - m venv env`
 
@@ -55,8 +55,9 @@ Here are the API endpoints which you can test using either the heroku app link (
 
 |    METHOD   |   ENDPOINT                                                 | DESCRIPTION                             |    
 |-------------|------------------------------------------------------------|-----------------------------------------|
-|   POST      |    /api/v2/users/signup                                    |   Sign a user up                        |
-|   POST      |    /api/v2/users/signup                                    |   Log a user in                         |
+|   POST      |    /api/v2/auth/signup                                     |   Sign a user up                        |
+|   POST      |    /api/v2/auth/login                                      |   Log a user in                         |
+|   DELETE    |    /api/v2/auth/logout                                     |   Log a user out                        |
 |   POST      |    /api/v2/reports/                                        |   Create a new report                   |
 |   GET       |    /api/v2/reports/                                        |   Fetch all reports                     |
 |   GET       |    /api/v2/reports/red-flags                               |   Fetch all red-flag reports            |
