@@ -140,7 +140,7 @@ def check_key_and_permissions(key_to_edit, user_to_edit, report_id):
     elif (
         key_to_edit == 'location' or key_to_edit == 'comment'
     ) and user_edit_error:
-            return user_edit_error
+        return user_edit_error
 
 
 def edit_report_errors(user_to_edit, report_id, key_to_edit):
