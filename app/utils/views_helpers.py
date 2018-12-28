@@ -123,16 +123,16 @@ def edit_report_errors(username, report_id, key_to_edit):
     if report_existence_error:
         return report_existence_error
 
-    if key_to_edit == 'status':
-        admin_permission_error = check_admin_permissions(username)
-        if admin_permission_error:
-            return admin_permission_error
-    else:
-        user_edit_error = check_user_permissions_and_status(
-            username, report, 'edit'
-        )
-        if user_edit_error:
-            return user_edit_error
+    admin_permission_error = check_admin_permissions(user_to_edit)
+    user_edit_error = check_user_permissions_and_status(
+        user_to_edit, report, 'edit'
+    )
+    if key_to_edit == 'status' and admin_permission_error:
+        return admin_permission_error
+    elif (
+        key_to_edit == 'location' or key_to_edit == 'comment'
+    ) and user_edit_error:
+        return user_edit_error
 
 
 def delete_report_errors(username, report):
