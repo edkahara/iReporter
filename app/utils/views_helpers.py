@@ -85,6 +85,18 @@ def check_report_existence(report):
         return {"status": 404, "error": "Report not found."}, 404
 
 
+def check_wrong_key_and_report_existence(key_to_edit, report_id):
+    wrong_key_error = check_key_to_edit(key_to_edit)
+    if wrong_key_error:
+        return wrong_key_error
+
+    report = ReportModel().get_specific_report(report_id)
+
+    report_existence_error = check_report_existence(report)
+    if report_existence_error:
+        return report_existence_error
+
+
 def check_user_permissions_and_status(usernameusername, report, action):
     if report[1] != usernameusername:
         return {
@@ -112,27 +124,33 @@ def check_admin_permissions(username):
         }, 403
 
 
-def edit_report_errors(username, report_id, key_to_edit):
-    invalid_key_error = check_key_to_edit(key_to_edit)
-    if invalid_key_error:
-        return invalid_key_error
-
+def check_key_and_permissions(key_to_edit, user_to_edit, report_id):
     report = ReportModel().get_specific_report(report_id)
-
-    report_existence_error = check_report_existence(report)
-    if report_existence_error:
-        return report_existence_error
-
     admin_permission_error = check_admin_permissions(user_to_edit)
     user_edit_error = check_user_permissions_and_status(
         user_to_edit, report, 'edit'
     )
+
     if key_to_edit == 'status' and admin_permission_error:
         return admin_permission_error
     elif (
         key_to_edit == 'location' or key_to_edit == 'comment'
     ) and user_edit_error:
         return user_edit_error
+
+
+def edit_report_errors(user_to_edit, report_id, key_to_edit):
+    wrong_key_or_missing_report_error = check_wrong_key_and_report_existence(
+        key_to_edit, report_id
+    )
+    if wrong_key_or_missing_report_error:
+        return wrong_key_or_missing_report_error
+
+    key_and_permissions_error = check_key_and_permissions(
+        key_to_edit, user_to_edit, report_id
+    )
+    if key_and_permissions_error:
+        return key_and_permissions_error
 
 
 def delete_report_errors(username, report):
