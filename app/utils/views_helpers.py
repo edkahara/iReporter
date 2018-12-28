@@ -127,19 +127,19 @@ def check_admin_permissions(current_user):
             "error": "You are not allowed to change a report's status."
         }, 403
 
-
+    
 def check_key_and_permissions(key_to_edit, user_to_edit, report_id):
     report = ReportModel.get_specific_report(report_id)
+    admin_permission_error = check_admin_permissions(user_to_edit)
+    user_edit_error = check_user_permissions_and_status(
+        user_to_edit, report, 'edit'
+    )
 
-    if key_to_edit == 'status':
-        admin_permission_error = check_admin_permissions(user_to_edit)
-        if admin_permission_error:
-            return admin_permission_error
-    else:
-        user_edit_error = check_user_permissions_and_status(
-            user_to_edit, report, 'edit'
-        )
-        if user_edit_error:
+    if key_to_edit == 'status' and admin_permission_error:
+        return admin_permission_error
+    elif (
+        key_to_edit == 'location' or key_to_edit == 'comment'
+    ) and user_edit_error:
             return user_edit_error
 
 
