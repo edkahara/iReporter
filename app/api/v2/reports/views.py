@@ -153,8 +153,9 @@ class EditReport(Resource):
         if edit_report_error:
             return edit_report_error
 
+        parser = reqparse.RequestParser()
+
         if key == 'location':
-            parser = reqparse.RequestParser()
             parser.add_argument(
                 'location', required=True, location="json",
                 type=inputs.regex(
@@ -166,14 +167,12 @@ class EditReport(Resource):
                 "representing the longitude'."
             )
         elif key == 'comment':
-            parser = reqparse.RequestParser()
             parser.add_argument(
                 'comment', required=True, location="json",
                 type=inputs.regex(r'^(?!\s*$).+'),
                 help="Comment cannot be blank."
             )
         else:
-            parser = reqparse.RequestParser()
             parser.add_argument(
                 'status', required=True, location="json",
                 type=inputs.regex(
