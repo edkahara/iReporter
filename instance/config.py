@@ -17,7 +17,7 @@ class Development(Config):
 class Testing(Config):
     TESTING = True
     DEBUG = True
-    DB_URL = os.getenv('HEROKU_POSTGRESQL_GRAY_URL')
+    DB_URL = os.getenv('TEST_DATABASE_URL')
 
 
 class Production(Config):
