@@ -87,6 +87,18 @@ def check_key_to_edit(key):
 def check_report_existence(report):
     if not report:
         return {"status": 404, "error": "Report not found."}, 404
+    
+    
+def check_wrong_key_and_report_existence(key_to_edit, report_id):
+    wrong_key_error = check_key_to_edit(key_to_edit)
+    if wrong_key_error:
+        return wrong_key_error
+
+    report = ReportModel.get_specific_report(report_id)
+
+    report_existence_error = check_report_existence(report)
+    if report_existence_error:
+        return report_existence_error
 
 
 def check_user_permissions_and_status(username, report, action):
@@ -117,15 +129,13 @@ def check_admin_permissions(current_user):
 
 
 def edit_report_errors(user_to_edit, report_id, key_to_edit):
-    invalid_key_error = check_key_to_edit(key_to_edit)
-    if invalid_key_error:
-        return invalid_key_error
+    wrong_key_or_missing_report_error = check_wrong_key_and_report_existence(
+        key_to_edit, report_id
+    )
+    if wrong_key_or_missing_report_error:
+        return wrong_key_or_missing_report_error
 
     report = ReportModel.get_specific_report(report_id)
-
-    report_existence_error = check_report_existence(report)
-    if report_existence_error:
-        return report_existence_error
 
     if key_to_edit == 'status':
         admin_permission_error = check_admin_permissions(user_to_edit)
